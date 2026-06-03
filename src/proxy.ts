@@ -5,7 +5,7 @@ const PROTECTED_PREFIXES = ["/home", "/jobs", "/dashboard", "/profile", "/search
 const ADMIN_PREFIX = "/admin";
 const AUTH_ROUTES = ["/login", "/register", "/confirm"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

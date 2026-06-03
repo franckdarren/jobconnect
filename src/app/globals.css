@@ -142,24 +142,22 @@
 
 /* ===========================================================================
  * Utility classes for JobConnect signature patterns
+ * Tailwind v4 — use @utility so classes are composable with @apply.
  * ========================================================================= */
-@layer components {
-  .jc-card {
-    @apply bg-white rounded-2xl shadow-sm border border-black/4;
-  }
-  .jc-hero {
-    @apply bg-jc-primary-dark text-white rounded-2xl;
-  }
-  .jc-input-soft {
-    @apply bg-[#f0f4f8] border-none focus-visible:ring-2 focus-visible:ring-jc-primary-green/40;
-  }
-  .jc-chip {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-  }
-  .jc-chip-skill {
-    @apply jc-chip bg-jc-primary-green text-white;
-  }
-  .jc-chip-light {
-    @apply jc-chip bg-jc-light-green text-jc-primary-green;
-  }
+@utility jc-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid rgb(0 0 0 / 0.04);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+@utility jc-hero {
+  background-color: var(--jc-primary-dark);
+  color: #ffffff;
+  border-radius: 1rem;
+}
+
+@utility jc-input-soft {
+  background-color: #f0f4f8;
+  border: none;
 }
