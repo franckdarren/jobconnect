@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { getJobOfferById } from "@/features/jobs/queries";
-import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
-import { candidateContactMessage } from "@/lib/whatsapp";
+import { hasAppliedToJob } from "@/features/applications/queries";
+import { ApplyButton } from "./apply-button";
 
 const TYPE_LABEL = {
   job: "Emploi",
@@ -25,12 +25,13 @@ export default async function JobDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireRole("candidate");
+  const user = await requireRole("candidate");
   const { id } = await params;
   const data = await getJobOfferById(id);
   if (!data || data.job.status !== "active") notFound();
 
   const { job, missions, skills } = data;
+  const alreadyApplied = await hasAppliedToJob(user.id, id);
 
   return (
     <div className="pb-24">
@@ -170,12 +171,19 @@ export default async function JobDetailPage({
 
       {/* Postuler — bouton ancré en bas */}
       <div className="fixed bottom-20 inset-x-0 z-30 max-w-md mx-auto px-4">
-        {data.employerWhatsapp ? (
-          <WhatsAppButton
-            phone={data.employerWhatsapp}
-            message={candidateContactMessage(job.title)}
-            label="Postuler via WhatsApp"
-            className="shadow-lg"
+        {alreadyApplied ? (
+          <button
+            type="button"
+            disabled
+            className="w-full rounded-xl bg-jc-primary-green/30 text-jc-primary-green font-semibold py-3 text-sm border border-jc-primary-green/40"
+          >
+            ✓ Candidature envoyée
+          </button>
+        ) : data.employerWhatsapp ? (
+          <ApplyButton
+            jobId={job.id}
+            jobTitle={job.title}
+            employerWhatsapp={data.employerWhatsapp}
           />
         ) : (
           <button
