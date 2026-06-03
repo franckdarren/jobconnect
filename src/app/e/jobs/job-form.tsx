@@ -161,7 +161,7 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
           return;
         }
         toast.success("Offre publiée");
-        router.push(`/jobs/${res.data.id}`);
+        router.push(`/e/jobs/${res.data.id}`);
         router.refresh();
         return;
       }
@@ -171,7 +171,7 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
         return;
       }
       toast.success("Offre mise à jour");
-      router.push(`/jobs/${jobId}`);
+      router.push(`/e/jobs/${jobId}`);
       router.refresh();
     });
   };

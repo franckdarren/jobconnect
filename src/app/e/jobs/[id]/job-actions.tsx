@@ -43,7 +43,7 @@ export function JobActions({ id, status, applicationsCount }: JobActionsProps) {
         return;
       }
       toast.success("Offre dupliquée");
-      router.push(`/jobs/${res.data.id}`);
+      router.push(`/e/jobs/${res.data.id}`);
       router.refresh();
     });
   };

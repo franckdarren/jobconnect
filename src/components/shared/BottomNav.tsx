@@ -15,16 +15,16 @@ type NavItem = {
 
 const ITEMS: Record<Role, NavItem[]> = {
   candidate: [
-    { href: "/home", label: "Home", icon: Home },
-    { href: "/jobs", label: "Recherche", icon: Search },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
-    { href: "/profile", label: "Profil", icon: User },
+    { href: "/c/home", label: "Home", icon: Home },
+    { href: "/c/jobs", label: "Recherche", icon: Search },
+    { href: "/c/dashboard", label: "Dashboard", icon: LayoutGrid },
+    { href: "/c/profile", label: "Profil", icon: User },
   ],
   employer: [
-    { href: "/home", label: "Home", icon: Home },
-    { href: "/search", label: "Recherche", icon: Search },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
-    { href: "/profile", label: "Profil", icon: User },
+    { href: "/e/home", label: "Home", icon: Home },
+    { href: "/e/search", label: "Recherche", icon: Search },
+    { href: "/e/dashboard", label: "Dashboard", icon: LayoutGrid },
+    { href: "/e/profile", label: "Profil", icon: User },
   ],
 };
 

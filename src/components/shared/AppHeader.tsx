@@ -1,9 +1,17 @@
 import Link from "next/link";
 import { Menu, UserCircle2 } from "lucide-react";
 
-export function AppHeader() {
+type Role = "candidate" | "employer";
+
+const PREFIX: Record<Role, string> = {
+  candidate: "/c",
+  employer: "/e",
+};
+
+export function AppHeader({ role }: { role: Role }) {
+  const prefix = PREFIX[role];
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/[0.04]">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/4">
       <div className="max-w-md mx-auto flex items-center justify-between px-4 h-14">
         <button
           type="button"
@@ -13,13 +21,13 @@ export function AppHeader() {
           <Menu className="w-5 h-5" />
         </button>
         <Link
-          href="/home"
+          href={`${prefix}/home`}
           className="font-bold text-lg text-jc-text-primary tracking-tight"
         >
           JobConnect
         </Link>
         <Link
-          href="/profile"
+          href={`${prefix}/profile`}
           aria-label="Profil"
           className="p-1 -mr-1 text-jc-text-primary"
         >

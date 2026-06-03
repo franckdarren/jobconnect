@@ -104,8 +104,9 @@ export async function createJobOffer(
     );
   }
 
-  revalidatePath("/jobs");
-  revalidatePath("/home");
+  revalidatePath("/e/jobs");
+  revalidatePath("/c/jobs");
+  revalidatePath("/e/home");
   return { success: true, data: { id: created.id } };
 }
 
@@ -161,8 +162,10 @@ export async function updateJobOffer(
     );
   }
 
-  revalidatePath("/jobs");
-  revalidatePath(`/jobs/${d.id}`);
+  revalidatePath("/e/jobs");
+  revalidatePath("/c/jobs");
+  revalidatePath(`/e/jobs/${d.id}`);
+  revalidatePath(`/c/jobs/${d.id}`);
   return { success: true, data: { ok: true } };
 }
 
@@ -178,8 +181,10 @@ export async function closeJobOffer(
   if (result.length === 0) {
     return { success: false, error: "Offre introuvable" };
   }
-  revalidatePath("/jobs");
-  revalidatePath(`/jobs/${id}`);
+  revalidatePath("/e/jobs");
+  revalidatePath("/c/jobs");
+  revalidatePath(`/e/jobs/${id}`);
+  revalidatePath(`/c/jobs/${id}`);
   return { success: true, data: { ok: true } };
 }
 
@@ -203,8 +208,10 @@ export async function reopenJobOffer(
   if (result.length === 0) {
     return { success: false, error: "Offre introuvable" };
   }
-  revalidatePath("/jobs");
-  revalidatePath(`/jobs/${id}`);
+  revalidatePath("/e/jobs");
+  revalidatePath("/c/jobs");
+  revalidatePath(`/e/jobs/${id}`);
+  revalidatePath(`/c/jobs/${id}`);
   return { success: true, data: { ok: true } };
 }
 
@@ -271,7 +278,8 @@ export async function duplicateJobOffer(
     );
   }
 
-  revalidatePath("/jobs");
+  revalidatePath("/e/jobs");
+  revalidatePath("/c/jobs");
   return { success: true, data: { id: created.id } };
 }
 

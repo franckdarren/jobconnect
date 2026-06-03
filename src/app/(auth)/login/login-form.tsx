@@ -34,7 +34,11 @@ export function LoginForm() {
       }
       const explicitRedirect = params.get("redirect");
       const fallback =
-        result.data.role === "admin" ? "/admin/dashboard" : "/home";
+        result.data.role === "admin"
+          ? "/admin/dashboard"
+          : result.data.role === "employer"
+            ? "/e/home"
+            : "/c/home";
       router.push(explicitRedirect ?? fallback);
       router.refresh();
     });

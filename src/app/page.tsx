@@ -19,7 +19,8 @@ export default async function SplashPage() {
         .where(eq(users.id, authUser.id));
 
       if (u?.role === "admin") redirect("/admin/dashboard");
-      if (u) redirect("/home");
+      if (u?.role === "employer") redirect("/e/home");
+      if (u) redirect("/c/home");
     }
   } catch {
     // ENV not ready yet — fall through to the static splash so the dev

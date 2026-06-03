@@ -8,7 +8,7 @@ export default function EmployerLayout({
 }) {
   return (
     <div className="min-h-screen bg-jc-background flex flex-col">
-      <AppHeader />
+      <AppHeader role="employer" />
       <main className="flex-1 max-w-md w-full mx-auto px-4 pt-4 pb-24">
         {children}
       </main>

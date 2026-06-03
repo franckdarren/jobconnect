@@ -93,7 +93,7 @@ export async function updateProfile(
     })
     .where(eq(candidateProfiles.userId, user.id));
 
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -135,7 +135,7 @@ export async function uploadAvatar(
     .set({ photoUrl: url, updatedAt: new Date() })
     .where(eq(candidateProfiles.userId, user.id));
 
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { url } };
 }
 
@@ -172,7 +172,7 @@ export async function uploadCv(
     .set({ cvUrl: path, updatedAt: new Date() })
     .where(eq(candidateProfiles.userId, user.id));
 
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { path } };
 }
 
@@ -225,7 +225,7 @@ export async function addExperience(
     })
     .returning({ id: candidateExperiences.id });
 
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { id: row.id } };
 }
 
@@ -261,7 +261,7 @@ export async function updateExperience(
   if (result.length === 0) {
     return { success: false, error: "Expérience introuvable" };
   }
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -277,7 +277,7 @@ export async function deleteExperience(
         eq(candidateExperiences.candidateId, user.id),
       ),
     );
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -306,7 +306,7 @@ export async function addEducation(
       description: emptyToNull(d.description),
     })
     .returning({ id: candidateEducations.id });
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { id: row.id } };
 }
 
@@ -339,7 +339,7 @@ export async function updateEducation(
   if (result.length === 0) {
     return { success: false, error: "Formation introuvable" };
   }
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -355,7 +355,7 @@ export async function deleteEducation(
         eq(candidateEducations.candidateId, user.id),
       ),
     );
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -422,6 +422,6 @@ export async function setSkills(
       .values(toAdd.map((skillId) => ({ candidateId: user.id, skillId })));
   }
 
-  revalidatePath("/profile");
+  revalidatePath("/c/profile");
   return { success: true, data: { ok: true } };
 }

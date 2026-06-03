@@ -40,7 +40,7 @@ export default async function EmployerJobsPage() {
           asChild
           className="rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
         >
-          <Link href="/jobs/new">
+          <Link href="/e/jobs/new">
             <Plus className="w-4 h-4 mr-1" />
             Nouvelle offre
           </Link>
@@ -60,7 +60,7 @@ export default async function EmployerJobsPage() {
             asChild
             className="mt-4 rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
           >
-            <Link href="/jobs/new">
+            <Link href="/e/jobs/new">
               <Plus className="w-4 h-4 mr-1" />
               Publier une offre
             </Link>
@@ -71,7 +71,7 @@ export default async function EmployerJobsPage() {
           {offers.map((o) => (
             <li key={o.id}>
               <Link
-                href={`/jobs/${o.id}`}
+                href={`/e/jobs/${o.id}`}
                 className="block jc-card p-4 hover:border-jc-primary-green/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-3">

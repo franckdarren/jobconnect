@@ -52,7 +52,7 @@ export async function registerCandidate(
     password: data.password,
     options: {
       data: { role: "candidate", phone: data.phone },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/home`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
     },
   });
 
@@ -121,7 +121,7 @@ export async function registerEmployer(
     password: data.password,
     options: {
       data: { role: "employer", phone: data.phone },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/home`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
     },
   });
 

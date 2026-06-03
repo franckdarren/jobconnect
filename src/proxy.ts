@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-const PROTECTED_PREFIXES = ["/home", "/jobs", "/dashboard", "/profile", "/search", "/admin"];
+const PROTECTED_PREFIXES = ["/c", "/e", "/admin"];
 const ADMIN_PREFIX = "/admin";
 const AUTH_ROUTES = ["/login", "/register", "/confirm"];
 
@@ -46,7 +46,13 @@ export async function proxy(request: NextRequest) {
 
   if (isAuthRoute && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/home";
+    const role = user.user_metadata?.role;
+    url.pathname =
+      role === "admin"
+        ? "/admin/dashboard"
+        : role === "employer"
+          ? "/e/home"
+          : "/c/home";
     return NextResponse.redirect(url);
   }
 

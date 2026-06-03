@@ -38,7 +38,7 @@ export function JobsFilters({
     if (finalQ) params.set("q", finalQ);
     if (finalCity) params.set("city", finalCity);
     if (finalType && finalType !== "all") params.set("type", finalType);
-    router.push(`/jobs${params.size ? `?${params.toString()}` : ""}`);
+    router.push(`/c/jobs${params.size ? `?${params.toString()}` : ""}`);
   };
 
   return (

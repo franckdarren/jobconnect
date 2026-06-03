@@ -36,7 +36,7 @@ export default async function JobDetailPage({
     <div className="pb-24">
       <header className="flex items-center gap-2 mb-3">
         <Link
-          href="/jobs"
+          href="/c/jobs"
           className="p-1.5 -ml-1.5 text-jc-text-primary"
           aria-label="Retour"
         >

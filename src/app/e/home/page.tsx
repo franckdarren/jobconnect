@@ -59,7 +59,7 @@ export default async function EmployerHomePage() {
           size="sm"
           className="rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
         >
-          <Link href="/jobs/new">
+          <Link href="/e/jobs/new">
             <Plus className="w-3 h-3 mr-1" />
             Nouvelle offre
           </Link>
@@ -70,7 +70,7 @@ export default async function EmployerHomePage() {
         <div className="flex items-center justify-between mb-3 px-1">
           <h2 className="text-lg font-bold">Dernières candidatures</h2>
           <Link
-            href="/dashboard"
+            href="/e/dashboard"
             className="text-sm font-semibold text-jc-primary-green hover:underline"
           >
             Voir tout

@@ -48,7 +48,7 @@ export async function updateProfile(
     })
     .where(eq(employerProfiles.userId, user.id));
 
-  revalidatePath("/profile");
+  revalidatePath("/e/profile");
   return { success: true, data: { ok: true } };
 }
 
@@ -86,6 +86,6 @@ export async function uploadLogo(
     .set({ logoUrl: url, updatedAt: new Date() })
     .where(eq(employerProfiles.userId, user.id));
 
-  revalidatePath("/profile");
+  revalidatePath("/e/profile");
   return { success: true, data: { url } };
 }
