@@ -247,13 +247,13 @@ export function ProfileEditor({
 
         {/* ===== Section : Disponibilité / Niveau ===== */}
         <section className="jc-card p-5 grid grid-cols-2 gap-3">
-          <div>
+          <div className="min-w-0">
             <label className="block text-xs font-semibold text-jc-text-primary mb-1.5">
-              NIVEAU D&apos;EXPÉRIENCE
+              NIVEAU
             </label>
             <select
               {...register("experienceLevel")}
-              className="w-full h-12 rounded-xl bg-[#f0f4f8] px-3 text-sm"
+              className="w-full min-w-0 h-12 rounded-xl bg-[#f0f4f8] px-3 text-sm"
             >
               <option value="">—</option>
               <option value="beginner">Débutant</option>
@@ -262,13 +262,13 @@ export function ProfileEditor({
               <option value="5_plus">5+ ans</option>
             </select>
           </div>
-          <div>
+          <div className="min-w-0">
             <label className="block text-xs font-semibold text-jc-text-primary mb-1.5">
               DISPONIBILITÉ
             </label>
             <select
               {...register("availability")}
-              className="w-full h-12 rounded-xl bg-[#f0f4f8] px-3 text-sm"
+              className="w-full min-w-0 h-12 rounded-xl bg-[#f0f4f8] px-3 text-sm"
             >
               <option value="">—</option>
               <option value="immediate">Immédiate</option>
@@ -393,11 +393,11 @@ export function ProfileEditor({
           <button
             type="button"
             onClick={openCv}
-            className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-jc-primary-green hover:underline"
+            className="mt-3 inline-flex items-center gap-1 max-w-full text-sm font-medium text-jc-primary-green hover:underline"
           >
-            <FileText className="w-4 h-4" />
-            {cvName}
-            <Download className="w-3 h-3 ml-1" />
+            <FileText className="w-4 h-4 shrink-0" />
+            <span className="truncate">{cvName}</span>
+            <Download className="w-3 h-3 ml-1 shrink-0" />
           </button>
         ) : null}
         <Button

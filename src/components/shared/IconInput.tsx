@@ -14,7 +14,7 @@ export const IconInput = React.forwardRef<HTMLInputElement, IconInputProps>(
     const inputId =
       id ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
     return (
-      <div className="w-full">
+      <div className="w-full min-w-0">
         {label ? (
           <label
             htmlFor={inputId}
@@ -25,7 +25,7 @@ export const IconInput = React.forwardRef<HTMLInputElement, IconInputProps>(
         ) : null}
         <div
           className={cn(
-            "flex items-center gap-2 rounded-xl bg-[#f0f4f8] px-3 h-12 transition-colors",
+            "flex items-center gap-2 rounded-xl bg-[#f0f4f8] px-3 h-12 transition-colors min-w-0",
             error && "ring-2 ring-jc-warning/40",
           )}
         >
@@ -35,8 +35,9 @@ export const IconInput = React.forwardRef<HTMLInputElement, IconInputProps>(
           <input
             ref={ref}
             id={inputId}
+            size={1}
             className={cn(
-              "flex-1 bg-transparent outline-none text-sm text-jc-text-primary placeholder:text-jc-text-muted",
+              "flex-1 min-w-0 w-full bg-transparent outline-none text-sm text-jc-text-primary placeholder:text-jc-text-muted",
               className,
             )}
             {...props}
