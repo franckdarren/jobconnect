@@ -161,3 +161,25 @@
   background-color: #f0f4f8;
   border: none;
 }
+
+/* ---------------------------------------------------------------------------
+ * Kill browser autofill background (Chrome/Edge/Safari paint a yellow/gray box
+ * that overrides our soft-gray wrapper). Force the wrapper color through and
+ * keep the text dark.
+ * ------------------------------------------------------------------------- */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--jc-text-primary);
+  -webkit-box-shadow: 0 0 0 1000px #f0f4f8 inset;
+  box-shadow: 0 0 0 1000px #f0f4f8 inset;
+  background-color: #f0f4f8 !important;
+  background-image: none !important;
+  transition: background-color 9999s ease-out 0s;
+  caret-color: var(--jc-text-primary);
+}
