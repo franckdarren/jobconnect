@@ -32,8 +32,10 @@ export function LoginForm() {
         toast.error(result.error);
         return;
       }
-      const redirectTo = params.get("redirect") ?? "/home";
-      router.push(redirectTo);
+      const explicitRedirect = params.get("redirect");
+      const fallback =
+        result.data.role === "admin" ? "/admin/dashboard" : "/home";
+      router.push(explicitRedirect ?? fallback);
       router.refresh();
     });
   };
