@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { PwaRegister } from "@/components/shared/PwaRegister";
+import { InstallPwaBanner } from "@/components/shared/InstallPwaBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,7 +17,11 @@ export const metadata: Metadata = {
   description:
     "Trouvez un job en 48h au Gabon. Plateforme de recrutement WhatsApp-first.",
   applicationName: "JobConnect",
-  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "JobConnect",
+  },
 };
 
 export const viewport: Viewport = {
@@ -33,6 +39,8 @@ export default function RootLayout({
       <body className="min-h-full bg-jc-background text-jc-text-primary antialiased font-sans">
         {children}
         <Toaster position="top-center" richColors />
+        <PwaRegister />
+        <InstallPwaBanner />
       </body>
     </html>
   );
