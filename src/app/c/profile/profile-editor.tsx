@@ -123,14 +123,19 @@ export function ProfileEditor({
         fd.append("file", file);
         const res = await uploadAvatar(fd);
         if (!res.success) {
-          toast.error(res.error);
+          console.error("[onAvatarChange] uploadAvatar failed:", res.error);
+          toast.error(`Upload échoué : ${res.error}`, { duration: 10_000 });
           return;
         }
         setAvatarUrl(res.data.url);
         toast.success("Photo mise à jour");
         router.refresh();
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Erreur lors de l'upload");
+        console.error("[onAvatarChange] exception:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Erreur lors de l'upload",
+          { duration: 10_000 },
+        );
       }
     });
   };

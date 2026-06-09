@@ -124,6 +124,16 @@ export async function uploadAvatar(
     .from(AVATAR_BUCKET)
     .upload(path, file, { upsert: true, contentType: file.type });
   if (uploadError) {
+    console.error("[uploadAvatar] Supabase upload error:", {
+      message: uploadError.message,
+      name: uploadError.name,
+      bucket: AVATAR_BUCKET,
+      path,
+      userId: user.id,
+      fileType: file.type,
+      fileSize: file.size,
+      raw: uploadError,
+    });
     return { success: false, error: uploadError.message };
   }
 

@@ -5,7 +5,7 @@ const PROTECTED_PREFIXES = ["/c", "/e", "/admin"];
 const ADMIN_PREFIX = "/admin";
 const AUTH_ROUTES = ["/login", "/register", "/confirm"];
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
