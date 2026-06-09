@@ -68,16 +68,20 @@ export function EmployerProfileEditor({ profile, phone }: Props) {
     const file = e.target.files?.[0];
     if (!file) return;
     startUpload(async () => {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadLogo(fd);
-      if (!res.success) {
-        toast.error(res.error);
-        return;
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await uploadLogo(fd);
+        if (!res.success) {
+          toast.error(res.error);
+          return;
+        }
+        setLogoUrl(res.data.url);
+        toast.success("Logo mis à jour");
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Erreur lors de l'upload");
       }
-      setLogoUrl(res.data.url);
-      toast.success("Logo mis à jour");
-      router.refresh();
     });
   };
 

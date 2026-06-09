@@ -118,16 +118,20 @@ export function ProfileEditor({
     const file = e.target.files?.[0];
     if (!file) return;
     startUpload(async () => {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadAvatar(fd);
-      if (!res.success) {
-        toast.error(res.error);
-        return;
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await uploadAvatar(fd);
+        if (!res.success) {
+          toast.error(res.error);
+          return;
+        }
+        setAvatarUrl(res.data.url);
+        toast.success("Photo mise à jour");
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Erreur lors de l'upload");
       }
-      setAvatarUrl(res.data.url);
-      toast.success("Photo mise à jour");
-      router.refresh();
     });
   };
 
@@ -135,27 +139,35 @@ export function ProfileEditor({
     const file = e.target.files?.[0];
     if (!file) return;
     startUpload(async () => {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadCv(fd);
-      if (!res.success) {
-        toast.error(res.error);
-        return;
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await uploadCv(fd);
+        if (!res.success) {
+          toast.error(res.error);
+          return;
+        }
+        setCvName(file.name);
+        toast.success("CV téléversé");
+        router.refresh();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Erreur lors de l'upload");
       }
-      setCvName(file.name);
-      toast.success("CV téléversé");
-      router.refresh();
     });
   };
 
   const openCv = () => {
     startUpload(async () => {
-      const res = await getCvSignedUrl(120);
-      if (!res.success) {
-        toast.error(res.error);
-        return;
+      try {
+        const res = await getCvSignedUrl(120);
+        if (!res.success) {
+          toast.error(res.error);
+          return;
+        }
+        window.open(res.data.url, "_blank", "noopener,noreferrer");
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Erreur inattendue");
       }
-      window.open(res.data.url, "_blank", "noopener,noreferrer");
     });
   };
 

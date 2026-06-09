@@ -78,7 +78,7 @@ export default async function EmployerHomePage() {
         </div>
         <div className="jc-card p-6 text-center text-sm text-jc-text-muted">
           <Sparkles className="w-5 h-5 mx-auto mb-2 text-jc-text-muted" />
-          Les candidatures arriveront en Phase 6.
+          AUcunes candidatures pour l'instant.
         </div>
       </section>
     </div>
