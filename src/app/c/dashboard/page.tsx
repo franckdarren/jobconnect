@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { Briefcase, Send, Clock, Eye, Check, X } from "lucide-react";
+import { Briefcase, Send, Clock, Eye, Check, X, Lock } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import {
   getCandidateApplicationStats,
   listOwnApplications,
 } from "@/features/applications/queries";
+import { getCandidateProfileViewStats } from "@/features/candidates/queries";
 import {
   checkCandidateApplicationQuota,
   getActivePlan,
@@ -38,11 +39,12 @@ function formatDate(d: Date | string): string {
 
 export default async function CandidateDashboardPage() {
   const user = await requireRole("candidate");
-  const [stats, applications, quota, plan] = await Promise.all([
+  const [stats, applications, quota, plan, viewStats] = await Promise.all([
     getCandidateApplicationStats(user.id),
     listOwnApplications(user.id),
     checkCandidateApplicationQuota(user.id),
     getActivePlan(user.id, "candidate_free"),
+    getCandidateProfileViewStats(user.id),
   ]);
   const isPremium = plan === "candidate_premium";
 
@@ -80,6 +82,36 @@ export default async function CandidateDashboardPage() {
           </p>
         </article>
       </div>
+
+      <article className="jc-card p-4 relative overflow-hidden">
+        <div className="flex items-center gap-2 text-sm text-jc-primary-dark font-medium">
+          <Eye className="w-4 h-4" />
+          Vues de profil
+          {!isPremium ? (
+            <PremiumBadge label="PREMIUM" variant="dark" className="ml-1" />
+          ) : null}
+        </div>
+        <div className="mt-1 flex items-baseline gap-3">
+          <p className="text-3xl font-bold">
+            {isPremium ? viewStats.thisMonth : "•••"}
+          </p>
+          <p className="text-xs text-jc-text-secondary">ce mois-ci</p>
+        </div>
+        <p className="text-[11px] text-jc-text-muted mt-1">
+          {isPremium
+            ? `${viewStats.total} vues au total`
+            : "Découvrez qui consulte votre profil avec Premium."}
+        </p>
+        {!isPremium ? (
+          <Link
+            href="/c/upgrade"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-jc-primary-green hover:underline"
+          >
+            <Lock className="w-3 h-3" />
+            Débloquer avec Premium
+          </Link>
+        ) : null}
+      </article>
 
       {!isPremium ? (
         <section className="jc-card p-4 bg-jc-primary-dark text-white border-0">

@@ -232,3 +232,21 @@ export async function hasUnlockedCandidateToday(
     .limit(1);
   return !!row;
 }
+
+/**
+ * Aggregated stats for the candidate dashboard. `total` is all-time, `thisMonth`
+ * resets the 1st of each month. Profile views are gated behind the Premium plan
+ * in the UI — this query returns the raw counts regardless.
+ */
+export async function getCandidateProfileViewStats(
+  candidateId: string,
+): Promise<{ total: number; thisMonth: number }> {
+  const [row] = await db
+    .select({
+      total: sql<number>`count(*)::int`,
+      thisMonth: sql<number>`count(*) filter (where created_at >= date_trunc('month', now()))::int`,
+    })
+    .from(profileViews)
+    .where(eq(profileViews.candidateId, candidateId));
+  return row ?? { total: 0, thisMonth: 0 };
+}
