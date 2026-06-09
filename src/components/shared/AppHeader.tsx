@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Menu, UserCircle2 } from "lucide-react";
+import { UserCircle2 } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
+import { NavMenu } from "./NavMenu";
 
 type Role = "candidate" | "employer";
 
@@ -14,13 +15,7 @@ export function AppHeader({ role }: { role: Role }) {
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/4">
       <div className="max-w-md mx-auto flex items-center justify-between px-4 h-14">
-        <button
-          type="button"
-          aria-label="Ouvrir le menu"
-          className="p-1.5 -ml-1.5 text-jc-text-primary"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
+        <NavMenu role={role} />
         <Link
           href={`${prefix}/home`}
           className="font-bold text-lg text-jc-text-primary tracking-tight"
