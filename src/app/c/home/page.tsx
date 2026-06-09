@@ -12,12 +12,12 @@ export default async function CandidateHomePage() {
   const firstName = data?.profile.firstName ?? "";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <header>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl md:text-3xl font-bold">
           Bonjour, {firstName || "à vous"}&nbsp;!
         </h1>
-        <p className="text-sm text-jc-text-secondary mt-1">
+        <p className="text-sm md:text-base text-jc-text-secondary mt-1">
           Prêt pour votre prochaine étape professionnelle aujourd&apos;hui ?
         </p>
       </header>
@@ -38,7 +38,7 @@ export default async function CandidateHomePage() {
         </Button>
       </HeroCard>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Eye className="w-4 h-4" />
@@ -57,7 +57,7 @@ export default async function CandidateHomePage() {
 
       <section>
         <div className="flex items-center justify-between mb-3 px-1">
-          <h2 className="text-lg font-bold">Recommandés pour vous</h2>
+          <h2 className="text-lg md:text-xl font-bold">Recommandés pour vous</h2>
           <Link
             href="/c/jobs"
             className="text-sm font-semibold text-jc-primary-green hover:underline"
@@ -65,7 +65,7 @@ export default async function CandidateHomePage() {
             Voir tout
           </Link>
         </div>
-        <div className="jc-card p-6 text-center text-sm text-jc-text-muted">
+        <div className="jc-card p-6 md:p-10 text-center text-sm text-jc-text-muted">
           Les offres recommandées arriveront en Phase 5.
         </div>
       </section>

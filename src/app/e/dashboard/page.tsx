@@ -44,13 +44,13 @@ export default async function EmployerDashboardPage() {
   const isPro = plan === "employer_pro";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Tableau de bord</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Tableau de bord</h1>
         {isPro ? <PremiumBadge label="PRO" variant="green" /> : null}
       </header>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <article className="jc-card p-4 min-w-0">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Briefcase className="w-4 h-4 shrink-0" />
@@ -71,16 +71,17 @@ export default async function EmployerDashboardPage() {
             ce mois ({stats.applicationsTotal} total)
           </p>
         </article>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
         <article className="jc-card p-4 relative overflow-hidden min-w-0">
           <div className="flex items-start gap-2 text-sm text-jc-primary-dark font-medium">
             <Eye className="w-4 h-4 shrink-0 mt-0.5" />
-            <div className="min-w-0">
+            <div className="min-w-0 md:flex md:items-center md:gap-2 md:flex-wrap">
               <span className="block leading-snug">Profils débloqués</span>
               {!isPro ? (
-                <PremiumBadge label="PRO" variant="dark" className="mt-1" />
+                <PremiumBadge
+                  label="PRO"
+                  variant="dark"
+                  className="mt-1 md:mt-0"
+                />
               ) : null}
             </div>
           </div>
@@ -134,7 +135,7 @@ export default async function EmployerDashboardPage() {
 
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold">Dernières candidatures</h2>
+          <h2 className="text-lg md:text-xl font-bold">Dernières candidatures</h2>
           {stats.applicationsTotal > 5 ? (
             <Link
               href="/e/jobs"
@@ -146,7 +147,7 @@ export default async function EmployerDashboardPage() {
         </div>
 
         {recentApps.length === 0 ? (
-          <div className="jc-card p-8 flex flex-col items-center text-center">
+          <div className="jc-card p-8 md:p-12 flex flex-col items-center text-center">
             <div className="w-12 h-12 rounded-xl bg-jc-light-green flex items-center justify-center mb-3">
               <Briefcase className="w-5 h-5 text-jc-primary-green" />
             </div>
@@ -163,7 +164,7 @@ export default async function EmployerDashboardPage() {
             </Link>
           </div>
         ) : (
-          <ul className="space-y-2">
+          <ul className="grid gap-2 md:grid-cols-2 md:gap-3">
             {recentApps.map((a) => {
               const fullName = `${a.firstName} ${a.lastName}`;
               return (

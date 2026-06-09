@@ -28,7 +28,7 @@ export default async function EmployerUpgradePage() {
   const isPro = subscription?.plan === "employer_pro";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6 md:max-w-4xl md:mx-auto md:w-full">
       <Link
         href="/e/profile"
         className="inline-flex items-center gap-1 text-sm text-jc-text-secondary hover:text-jc-text-primary"
@@ -38,8 +38,8 @@ export default async function EmployerUpgradePage() {
       </Link>
 
       <header className="text-center space-y-1">
-        <h1 className="text-2xl font-bold">Recrutez sans limite</h1>
-        <p className="text-sm text-jc-text-secondary">
+        <h1 className="text-2xl md:text-4xl font-bold">Recrutez sans limite</h1>
+        <p className="text-sm md:text-base text-jc-text-secondary">
           Passez à JobConnect Pro pour booster vos recrutements.
         </p>
       </header>

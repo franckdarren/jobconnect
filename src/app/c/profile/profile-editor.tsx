@@ -176,21 +176,21 @@ export function ProfileEditor({
     "Mon profil";
 
   return (
-    <div className="space-y-4">
-      <header className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <header className="flex items-center justify-between md:justify-start md:gap-3">
         <button
           type="button"
           onClick={() => router.back()}
-          className="p-1.5 -ml-1.5 text-jc-text-primary"
+          className="p-1.5 -ml-1.5 text-jc-text-primary md:hidden"
           aria-label="Retour"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl font-bold">Mon Profil</h1>
-        <span className="w-7" />
+        <h1 className="text-2xl md:text-3xl font-bold">Mon Profil</h1>
+        <span className="w-7 md:hidden" />
       </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:max-w-3xl">
         {/* ===== Section : Photo + Infos perso ===== */}
         <section className="jc-card p-5 space-y-3">
           <div className="flex flex-col items-center">
@@ -305,6 +305,7 @@ export function ProfileEditor({
         </Button>
       </form>
 
+      <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
       {/* ===== Section : Compétences ===== */}
       <section className="jc-card p-5">
         <div className="flex items-center justify-between mb-3">
@@ -500,6 +501,8 @@ export function ProfileEditor({
           )}
         </div>
       </section>
+
+      </div>
 
       {/* ===== Modals ===== */}
       <ExperienceModal

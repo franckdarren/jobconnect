@@ -27,10 +27,10 @@ export default async function EmployerJobsPage() {
   const offers = await listOwnJobOffers(user.id);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Mes offres</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Mes offres</h1>
           <p className="text-sm text-jc-text-secondary mt-0.5">
             {offers.length} offre{offers.length > 1 ? "s" : ""} publiée
             {offers.length > 1 ? "s" : ""}.
@@ -48,7 +48,7 @@ export default async function EmployerJobsPage() {
       </header>
 
       {offers.length === 0 ? (
-        <div className="jc-card p-8 flex flex-col items-center text-center">
+        <div className="jc-card p-8 md:p-12 flex flex-col items-center text-center">
           <div className="w-12 h-12 rounded-xl bg-jc-light-green flex items-center justify-center mb-3">
             <Briefcase className="w-5 h-5 text-jc-primary-green" />
           </div>
@@ -67,7 +67,7 @@ export default async function EmployerJobsPage() {
           </Button>
         </div>
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {offers.map((o) => (
             <li key={o.id}>
               <Link

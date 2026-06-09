@@ -70,7 +70,7 @@ export default async function EmployerCandidateDetailPage({
   const displayName = unlocked ? fullName : maskedName;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <Link
         href="/e/search"
         className="inline-flex items-center gap-1 text-sm text-jc-text-secondary hover:text-jc-text-primary"

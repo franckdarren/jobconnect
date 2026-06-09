@@ -12,13 +12,13 @@ export default async function EmployerHomePage() {
   const companyName = data?.profile.companyName ?? "";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <HeroCard
         title={`Bonjour, ${companyName || "à vous"} !`}
         subtitle="Découvrer des talents qualifiés pour faire avancer votre entreprise."
         badge={<PremiumBadge label="COMPTE PREMIUM" variant="green" />}
       >
-        <div className="grid grid-cols-2 gap-3 mt-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
           <div className="rounded-xl bg-white/10 px-3 py-2">
             <p className="text-2xl font-bold leading-none">∞</p>
             <p className="text-[11px] text-white/70 mt-1">Candidatures illimitées</p>
@@ -30,7 +30,7 @@ export default async function EmployerHomePage() {
         </div>
       </HeroCard>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Eye className="w-4 h-4" />
@@ -47,40 +47,42 @@ export default async function EmployerHomePage() {
         </article>
       </div>
 
-      <section className="jc-card p-5 space-y-3">
-        <div>
-          <h2 className="text-base font-bold">Publier votre 1ʳᵉ offre</h2>
-          <p className="text-xs text-jc-text-secondary mt-0.5">
-            Touchez des candidats vérifiés en quelques minutes.
-          </p>
-        </div>
-        <Button
-          asChild
-          size="sm"
-          className="w-full rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
-        >
-          <Link href="/e/jobs/new">
-            <Plus className="w-3 h-3 mr-1" />
-            Nouvelle offre
-          </Link>
-        </Button>
-      </section>
-
-      <section>
-        <div className="flex items-center justify-between mb-3 px-1">
-          <h2 className="text-lg font-bold">Dernières candidatures</h2>
-          <Link
-            href="/e/dashboard"
-            className="text-sm font-semibold text-jc-primary-green hover:underline"
+      <div className="grid gap-4 md:grid-cols-2 md:gap-6">
+        <section className="jc-card p-5 space-y-3">
+          <div>
+            <h2 className="text-base md:text-lg font-bold">Publier votre 1ʳᵉ offre</h2>
+            <p className="text-xs md:text-sm text-jc-text-secondary mt-0.5">
+              Touchez des candidats vérifiés en quelques minutes.
+            </p>
+          </div>
+          <Button
+            asChild
+            size="sm"
+            className="w-full md:w-auto rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
           >
-            Voir tout
-          </Link>
-        </div>
-        <div className="jc-card p-6 text-center text-sm text-jc-text-muted">
-          <Sparkles className="w-5 h-5 mx-auto mb-2 text-jc-text-muted" />
-          Aucunes candidatures pour l'instant.
-        </div>
-      </section>
+            <Link href="/e/jobs/new">
+              <Plus className="w-3 h-3 mr-1" />
+              Nouvelle offre
+            </Link>
+          </Button>
+        </section>
+
+        <section>
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 className="text-lg md:text-xl font-bold">Dernières candidatures</h2>
+            <Link
+              href="/e/dashboard"
+              className="text-sm font-semibold text-jc-primary-green hover:underline"
+            >
+              Voir tout
+            </Link>
+          </div>
+          <div className="jc-card p-6 text-center text-sm text-jc-text-muted">
+            <Sparkles className="w-5 h-5 mx-auto mb-2 text-jc-text-muted" />
+            Aucunes candidatures pour l&apos;instant.
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

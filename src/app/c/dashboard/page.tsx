@@ -49,13 +49,13 @@ export default async function CandidateDashboardPage() {
   const isPremium = plan === "candidate_premium";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Mes candidatures</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Mes candidatures</h1>
         {isPremium ? <PremiumBadge label="PREMIUM" variant="green" /> : null}
       </header>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Send className="w-4 h-4" />
@@ -81,37 +81,36 @@ export default async function CandidateDashboardPage() {
             depuis l&apos;inscription
           </p>
         </article>
-      </div>
-
-      <article className="jc-card p-4 relative overflow-hidden">
-        <div className="flex items-center gap-2 text-sm text-jc-primary-dark font-medium">
-          <Eye className="w-4 h-4" />
-          Vues de profil
-          {!isPremium ? (
-            <PremiumBadge label="PREMIUM" variant="dark" className="ml-1" />
-          ) : null}
-        </div>
-        <div className="mt-1 flex items-baseline gap-3">
-          <p className="text-3xl font-bold">
-            {isPremium ? viewStats.thisMonth : "•••"}
+        <article className="jc-card p-4 relative overflow-hidden col-span-2 md:col-span-1">
+          <div className="flex items-center gap-2 text-sm text-jc-primary-dark font-medium">
+            <Eye className="w-4 h-4" />
+            Vues de profil
+            {!isPremium ? (
+              <PremiumBadge label="PREMIUM" variant="dark" className="ml-1" />
+            ) : null}
+          </div>
+          <div className="mt-1 flex items-baseline gap-3">
+            <p className="text-3xl font-bold">
+              {isPremium ? viewStats.thisMonth : "•••"}
+            </p>
+            <p className="text-xs text-jc-text-secondary">ce mois-ci</p>
+          </div>
+          <p className="text-[11px] text-jc-text-muted mt-1">
+            {isPremium
+              ? `${viewStats.total} vues au total`
+              : "Découvrez qui consulte votre profil avec Premium."}
           </p>
-          <p className="text-xs text-jc-text-secondary">ce mois-ci</p>
-        </div>
-        <p className="text-[11px] text-jc-text-muted mt-1">
-          {isPremium
-            ? `${viewStats.total} vues au total`
-            : "Découvrez qui consulte votre profil avec Premium."}
-        </p>
-        {!isPremium ? (
-          <Link
-            href="/c/upgrade"
-            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-jc-primary-green hover:underline"
-          >
-            <Lock className="w-3 h-3" />
-            Débloquer avec Premium
-          </Link>
-        ) : null}
-      </article>
+          {!isPremium ? (
+            <Link
+              href="/c/upgrade"
+              className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-jc-primary-green hover:underline"
+            >
+              <Lock className="w-3 h-3" />
+              Débloquer avec Premium
+            </Link>
+          ) : null}
+        </article>
+      </div>
 
       {!isPremium ? (
         <section className="jc-card p-4 bg-jc-primary-dark text-white border-0">
@@ -138,9 +137,9 @@ export default async function CandidateDashboardPage() {
       ) : null}
 
       <section>
-        <h2 className="text-lg font-bold mb-3">Historique</h2>
+        <h2 className="text-lg md:text-xl font-bold mb-3">Historique</h2>
         {applications.length === 0 ? (
-          <div className="jc-card p-8 flex flex-col items-center text-center">
+          <div className="jc-card p-8 md:p-12 flex flex-col items-center text-center">
             <div className="w-12 h-12 rounded-xl bg-jc-light-green flex items-center justify-center mb-3">
               <Briefcase className="w-5 h-5 text-jc-primary-green" />
             </div>
@@ -156,7 +155,7 @@ export default async function CandidateDashboardPage() {
             </Link>
           </div>
         ) : (
-          <ul className="space-y-3">
+          <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             {applications.map((a) => {
               const Icon = STATUS_ICON[a.status];
               return (

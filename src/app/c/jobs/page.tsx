@@ -45,10 +45,10 @@ export default async function CandidateJobsPage({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       <header>
-        <h1 className="text-2xl font-bold">Trouvez votre opportunité</h1>
-        <p className="text-sm text-jc-text-secondary mt-1">
+        <h1 className="text-2xl md:text-3xl font-bold">Trouvez votre opportunité</h1>
+        <p className="text-sm md:text-base text-jc-text-secondary mt-1">
           Découvrez des milliers d&apos;offres adaptées à votre profil au Gabon.
         </p>
       </header>
@@ -60,11 +60,11 @@ export default async function CandidateJobsPage({
       />
 
       {rows.length === 0 ? (
-        <div className="jc-card p-8 text-center text-sm text-jc-text-secondary">
+        <div className="jc-card p-8 md:p-12 text-center text-sm text-jc-text-secondary">
           Aucune offre ne correspond à votre recherche.
         </div>
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {rows.map((r) => {
             const job: JobCardJob = {
               id: r.id,

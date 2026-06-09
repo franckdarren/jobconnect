@@ -127,9 +127,9 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 md:max-w-3xl md:mx-auto md:w-full md:space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Notifications</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Notifications</h1>
         {hasUnread ? (
           <Button
             type="button"

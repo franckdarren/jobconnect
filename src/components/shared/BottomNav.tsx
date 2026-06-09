@@ -44,7 +44,7 @@ export function BottomNav({ role }: { role: Role }) {
   };
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-black/5 pb-[env(safe-area-inset-bottom)]">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-black/5 pb-[env(safe-area-inset-bottom)]">
       <ul className="max-w-md mx-auto flex items-center justify-around px-2 py-2">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);

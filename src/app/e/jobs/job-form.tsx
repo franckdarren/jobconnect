@@ -178,20 +178,20 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <header className="flex items-center justify-between">
+    <div className="space-y-4 md:max-w-3xl md:mx-auto md:w-full">
+      <header className="flex items-center justify-between md:justify-start md:gap-3">
         <button
           type="button"
           onClick={() => router.back()}
-          className="p-1.5 -ml-1.5 text-jc-text-primary"
+          className="p-1.5 -ml-1.5 text-jc-text-primary md:hidden"
           aria-label="Retour"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl md:text-3xl font-bold">
           {mode === "create" ? "Nouvelle offre" : "Modifier l'offre"}
         </h1>
-        <span className="w-7" />
+        <span className="w-7 md:hidden" />
       </header>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

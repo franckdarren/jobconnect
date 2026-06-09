@@ -12,7 +12,7 @@ const PREFIX: Record<Role, string> = {
 export function AppHeader({ role }: { role: Role }) {
   const prefix = PREFIX[role];
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/4">
+    <header className="md:hidden sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/4">
       <div className="max-w-md mx-auto flex items-center justify-between px-4 h-14">
         <NavMenu role={role} />
         <Link
