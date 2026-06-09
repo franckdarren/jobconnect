@@ -1,8 +1,7 @@
 import { MapPin, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LockOverlay } from "./LockOverlay";
-import { WhatsAppButton } from "./WhatsAppButton";
-import { employerContactMessage } from "@/lib/whatsapp";
+import { TrackedWhatsAppButton } from "./TrackedWhatsAppButton";
 import { cn } from "@/lib/utils";
 
 export type CandidateCardCandidate = {
@@ -75,10 +74,7 @@ export function CandidateCard({
           </div>
         ) : candidate.whatsappPhone ? (
           <div className="mt-3">
-            <WhatsAppButton
-              phone={candidate.whatsappPhone}
-              message={employerContactMessage(candidate.displayName)}
-            />
+            <TrackedWhatsAppButton candidateId={candidate.id} />
           </div>
         ) : null}
       </div>
