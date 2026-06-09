@@ -1,8 +1,8 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Copy, Power, Users } from "lucide-react";
+import { Lock, Copy, Power, Users, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,13 +19,16 @@ type JobActionsProps = {
 
 export function JobActions({ id, status, applicationsCount }: JobActionsProps) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<"toggle" | "duplicate" | null>(null);
 
   const onToggle = () => {
+    setPendingAction("toggle");
     startTransition(async () => {
       const res = status === "active"
         ? await closeJobOffer(id)
         : await reopenJobOffer(id);
+      setPendingAction(null);
       if (!res.success) {
         toast.error(res.error);
         return;
@@ -36,8 +39,10 @@ export function JobActions({ id, status, applicationsCount }: JobActionsProps) {
   };
 
   const onDuplicate = () => {
+    setPendingAction("duplicate");
     startTransition(async () => {
       const res = await duplicateJobOffer(id);
+      setPendingAction(null);
       if (!res.success) {
         toast.error(res.error);
         return;
@@ -74,29 +79,30 @@ export function JobActions({ id, status, applicationsCount }: JobActionsProps) {
           type="button"
           variant="outline"
           size="sm"
-          disabled={isPending}
+          disabled={pendingAction !== null}
           onClick={onToggle}
         >
-          {status === "active" ? (
-            <>
-              <Lock className="w-3 h-3 mr-1" />
-              Clôturer
-            </>
+          {pendingAction === "toggle" ? (
+            <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+          ) : status === "active" ? (
+            <Lock className="w-3 h-3 mr-1" />
           ) : (
-            <>
-              <Power className="w-3 h-3 mr-1" />
-              Republier
-            </>
+            <Power className="w-3 h-3 mr-1" />
           )}
+          {status === "active" ? "Clôturer" : "Republier"}
         </Button>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          disabled={isPending}
+          disabled={pendingAction !== null}
           onClick={onDuplicate}
         >
-          <Copy className="w-3 h-3 mr-1" />
+          {pendingAction === "duplicate" ? (
+            <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+          ) : (
+            <Copy className="w-3 h-3 mr-1" />
+          )}
           Dupliquer
         </Button>
       </div>

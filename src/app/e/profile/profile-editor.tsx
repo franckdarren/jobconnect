@@ -178,7 +178,7 @@ export function EmployerProfileEditor({ profile, phone }: Props) {
           disabled={isSaving || !isDirty}
           className="w-full h-12 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white font-semibold"
         >
-          <Save className="w-4 h-4 mr-2" />
+          {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
           {isSaving ? "Enregistrement..." : "Enregistrer les modifications"}
         </Button>
       </form>

@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MapPin } from "lucide-react";
+import { MapPin, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -166,7 +166,8 @@ export function ExperienceModal({
               disabled={isPending}
               className="rounded-full px-6 bg-jc-primary-green hover:bg-jc-primary-green/90 text-white"
             >
-              {isPending ? "..." : "Enregistrer"}
+              {isPending ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
+              {isPending ? "Enregistrement..." : "Enregistrer"}
             </Button>
           </DialogFooter>
         </form>

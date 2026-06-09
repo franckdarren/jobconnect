@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Ban,
@@ -38,11 +38,14 @@ export function UserActions({
   isBoosted,
 }: Props) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
 
-  const run = (fn: () => Promise<{ success: boolean; error?: string }>) => {
+  const run = (action: string, fn: () => Promise<{ success: boolean; error?: string }>) => {
+    setPendingAction(action);
     startTransition(async () => {
       const res = await fn();
+      setPendingAction(null);
       if (!res.success) {
         toast.error(res.error ?? "Erreur");
         return;
@@ -60,11 +63,11 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
-            onClick={() => run(() => suspendUser(userId))}
+            disabled={pendingAction !== null}
+            onClick={() => run("suspend", () => suspendUser(userId))}
             className="h-8 text-xs text-jc-warning border-jc-warning/30"
           >
-            {isPending ? (
+            {pendingAction === "suspend" ? (
               <Loader2 className="w-3 h-3 mr-1 animate-spin" />
             ) : (
               <Ban className="w-3 h-3 mr-1" />
@@ -76,11 +79,15 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
-            onClick={() => run(() => activateUser(userId))}
+            disabled={pendingAction !== null}
+            onClick={() => run("activate", () => activateUser(userId))}
             className="h-8 text-xs text-jc-primary-green border-jc-primary-green/30"
           >
-            <CheckCircle2 className="w-3 h-3 mr-1" />
+            {pendingAction === "activate" ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <CheckCircle2 className="w-3 h-3 mr-1" />
+            )}
             Réactiver
           </Button>
         )
@@ -92,11 +99,15 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
-            onClick={() => run(() => unverifyEmployer(userId))}
+            disabled={pendingAction !== null}
+            onClick={() => run("unverify", () => unverifyEmployer(userId))}
             className="h-8 text-xs"
           >
-            <ShieldOff className="w-3 h-3 mr-1" />
+            {pendingAction === "unverify" ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <ShieldOff className="w-3 h-3 mr-1" />
+            )}
             Retirer vérif.
           </Button>
         ) : (
@@ -104,11 +115,15 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
-            onClick={() => run(() => verifyEmployer(userId))}
+            disabled={pendingAction !== null}
+            onClick={() => run("verify", () => verifyEmployer(userId))}
             className="h-8 text-xs text-jc-primary-green border-jc-primary-green/30"
           >
-            <BadgeCheck className="w-3 h-3 mr-1" />
+            {pendingAction === "verify" ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <BadgeCheck className="w-3 h-3 mr-1" />
+            )}
             Vérifier
           </Button>
         )
@@ -120,11 +135,15 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
-            onClick={() => run(() => unboostCandidate(userId))}
+            disabled={pendingAction !== null}
+            onClick={() => run("unboost", () => unboostCandidate(userId))}
             className="h-8 text-xs"
           >
-            <StarOff className="w-3 h-3 mr-1" />
+            {pendingAction === "unboost" ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <StarOff className="w-3 h-3 mr-1" />
+            )}
             Retirer boost
           </Button>
         ) : (
@@ -132,13 +151,17 @@ export function UserActions({
             type="button"
             size="sm"
             variant="outline"
-            disabled={isPending}
+            disabled={pendingAction !== null}
             onClick={() =>
-              run(() => boostCandidate({ candidateId: userId, days: 30 }))
+              run("boost", () => boostCandidate({ candidateId: userId, days: 30 }))
             }
             className="h-8 text-xs text-jc-orange border-jc-orange/30"
           >
-            <Star className="w-3 h-3 mr-1" />
+            {pendingAction === "boost" ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <Star className="w-3 h-3 mr-1" />
+            )}
             Booster 30j
           </Button>
         )

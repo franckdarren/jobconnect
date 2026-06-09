@@ -15,6 +15,7 @@ import {
   X,
   Plus,
   ImageIcon,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -420,8 +421,9 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
             disabled={isPending}
             className="h-12 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white font-semibold"
           >
+            {isPending ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
             {isPending
-              ? "..."
+              ? "Enregistrement..."
               : mode === "create"
                 ? "Publier l'offre"
                 : "Enregistrer"}

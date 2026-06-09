@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { MessageCircle, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { applyToJob } from "@/features/applications/actions";
 import { buildWhatsAppUrl, candidateContactMessage } from "@/lib/whatsapp";
@@ -61,7 +61,7 @@ export function ApplyButton({
         disabled={isPending}
         className="w-full rounded-xl bg-[#25D366] hover:bg-[#1fbf5b] text-white font-semibold py-3 text-sm transition-colors flex items-center justify-center gap-2 shadow-lg disabled:opacity-60"
       >
-        <MessageCircle className="w-4 h-4" />
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
         {isPending ? "Envoi..." : "Postuler via WhatsApp"}
       </button>
 

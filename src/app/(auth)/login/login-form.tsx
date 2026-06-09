@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Phone, Lock, ArrowRight } from "lucide-react";
+import { Phone, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { IconInput } from "@/components/shared/IconInput";
 import { Button } from "@/components/ui/button";
@@ -69,6 +69,7 @@ export function LoginForm() {
         disabled={isPending}
         className="w-full h-12 bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white font-semibold text-base rounded-xl"
       >
+        {isPending ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
         {isPending ? "Connexion..." : "Se connecter"}
         {!isPending ? <ArrowRight className="w-4 h-4 ml-1" /> : null}
       </Button>

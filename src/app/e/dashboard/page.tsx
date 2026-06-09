@@ -51,53 +51,55 @@ export default async function EmployerDashboardPage() {
       </header>
 
       <div className="grid grid-cols-2 gap-3">
-        <article className="jc-card p-4">
+        <article className="jc-card p-4 min-w-0">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
-            <Briefcase className="w-4 h-4" />
-            Offres actives
+            <Briefcase className="w-4 h-4 shrink-0" />
+            <span className="truncate">Offres actives</span>
           </div>
           <p className="text-3xl font-bold mt-1">{stats.activeJobs}</p>
-          <p className="text-[11px] text-jc-text-muted mt-1">
+          <p className="text-[11px] text-jc-text-muted mt-1 truncate">
             {stats.totalJobs} au total
           </p>
         </article>
-        <article className="jc-card p-4">
+        <article className="jc-card p-4 min-w-0">
           <div className="flex items-center gap-2 text-sm text-jc-orange font-medium">
-            <Send className="w-4 h-4" />
-            Candidatures
+            <Send className="w-4 h-4 shrink-0" />
+            <span className="truncate">Candidatures</span>
           </div>
           <p className="text-3xl font-bold mt-1">{stats.applicationsThisMonth}</p>
-          <p className="text-[11px] text-jc-text-muted mt-1">
+          <p className="text-[11px] text-jc-text-muted mt-1 truncate">
             ce mois ({stats.applicationsTotal} total)
           </p>
         </article>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <article className="jc-card p-4 relative overflow-hidden">
-          <div className="flex items-center gap-2 text-sm text-jc-primary-dark font-medium">
-            <Eye className="w-4 h-4" />
-            Profils débloqués
-            {!isPro ? (
-              <PremiumBadge label="PRO" variant="dark" className="ml-1" />
-            ) : null}
+        <article className="jc-card p-4 relative overflow-hidden min-w-0">
+          <div className="flex items-start gap-2 text-sm text-jc-primary-dark font-medium">
+            <Eye className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="min-w-0">
+              <span className="block leading-snug">Profils débloqués</span>
+              {!isPro ? (
+                <PremiumBadge label="PRO" variant="dark" className="mt-1" />
+              ) : null}
+            </div>
           </div>
           <p className="text-3xl font-bold mt-1">
             {isPro ? stats.profileViewsTotal : "•••"}
           </p>
-          <p className="text-[11px] text-jc-text-muted mt-1">
+          <p className="text-[11px] text-jc-text-muted mt-1 truncate">
             {isPro
               ? `${stats.profileViewsToday} aujourd'hui`
               : "Réservé Pro"}
           </p>
         </article>
-        <article className="jc-card p-4">
+        <article className="jc-card p-4 min-w-0">
           <div className="flex items-center gap-2 text-sm text-[#25D366] font-medium">
-            <MessageCircle className="w-4 h-4" />
-            Contacts WA
+            <MessageCircle className="w-4 h-4 shrink-0" />
+            <span className="truncate">Contacts WA</span>
           </div>
           <p className="text-3xl font-bold mt-1">{stats.whatsappThisMonth}</p>
-          <p className="text-[11px] text-jc-text-muted mt-1">
+          <p className="text-[11px] text-jc-text-muted mt-1 truncate">
             ce mois ({stats.whatsappTotal} total)
           </p>
         </article>

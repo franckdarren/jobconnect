@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -178,7 +178,8 @@ export function SkillsModal({
             disabled={isPending}
             className="rounded-lg px-6 bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
           >
-            {isPending ? "..." : "Enregistrer"}
+            {isPending ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
+            {isPending ? "Enregistrement..." : "Enregistrer"}
           </Button>
         </DialogFooter>
       </DialogContent>

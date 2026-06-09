@@ -11,6 +11,7 @@ import {
   XCircle,
   Bell,
   CheckCheck,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -138,7 +139,7 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
             disabled={isPending}
             className="text-xs text-jc-primary-green"
           >
-            <CheckCheck className="w-4 h-4 mr-1" />
+            {isPending ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <CheckCheck className="w-4 h-4 mr-1" />}
             Tout lire
           </Button>
         ) : null}
