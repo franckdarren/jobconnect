@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { requireRole } from "@/lib/auth";
 
 const ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -40,11 +41,12 @@ function NavLinks() {
   );
 }
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await requireRole("admin");
   return (
     <div className="min-h-dvh bg-jc-background md:flex">
       {/* Desktop sidebar */}
