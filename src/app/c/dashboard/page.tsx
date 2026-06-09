@@ -96,7 +96,7 @@ export default async function CandidateDashboardPage() {
               </p>
             </div>
             <Link
-              href="/c/profile"
+              href="/c/upgrade"
               className="shrink-0 rounded-full bg-jc-primary-green text-white text-xs font-semibold px-3 py-2"
             >
               Passer Premium

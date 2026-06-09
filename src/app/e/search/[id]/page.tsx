@@ -159,7 +159,7 @@ export default async function EmployerCandidateDetailPage({
                     Passez à l&apos;offre Pro pour un accès illimité.
                   </p>
                   <Link
-                    href="/e/profile"
+                    href="/e/upgrade"
                     className="inline-block mt-3 rounded-xl bg-jc-primary-green text-white px-4 py-2 text-sm font-semibold"
                   >
                     Passer en Pro

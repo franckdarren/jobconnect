@@ -95,7 +95,7 @@ export default async function CandidateJobsPage({
             Passez en Premium pour voir toutes les opportunités.
           </p>
           <Link
-            href="/c/profile"
+            href="/c/upgrade"
             className="inline-block mt-3 rounded-xl bg-jc-primary-green text-white px-4 py-2 text-sm font-semibold"
           >
             Passer en Premium

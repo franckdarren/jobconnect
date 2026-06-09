@@ -31,7 +31,7 @@ export default async function CandidateHomePage() {
           asChild
           className="bg-jc-primary-green hover:bg-jc-primary-green/90 text-white font-semibold rounded-xl px-4 h-10"
         >
-          <Link href="/c/profile">
+          <Link href="/c/upgrade">
             <Sparkles className="w-4 h-4 mr-1.5" />
             Passer en Premium
           </Link>

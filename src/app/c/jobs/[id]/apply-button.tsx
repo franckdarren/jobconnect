@@ -103,7 +103,7 @@ export function ApplyButton({
             asChild
             className="w-full h-11 rounded-full bg-jc-primary-green hover:bg-jc-primary-green/90 text-white font-semibold"
           >
-            <Link href="/c/profile">Activer Premium — 2 000 FCFA</Link>
+            <Link href="/c/upgrade">Activer Premium — 2 000 FCFA</Link>
           </Button>
           <p className="text-[11px] text-jc-text-muted">
             Engagement de 30 jours, renouvellement non-automatique.
