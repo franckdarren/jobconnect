@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { UserCircle2 } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { NavMenu } from "./NavMenu";
 
@@ -24,13 +23,6 @@ export function AppHeader({ role }: { role: Role }) {
         </Link>
         <div className="flex items-center gap-1 -mr-1">
           <NotificationBell role={role} />
-          <Link
-            href={`${prefix}/profile`}
-            aria-label="Profil"
-            className="p-1 text-jc-text-primary"
-          >
-            <UserCircle2 className="w-6 h-6" />
-          </Link>
         </div>
       </div>
     </header>
