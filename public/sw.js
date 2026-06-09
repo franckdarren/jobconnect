@@ -1,9 +1,14 @@
 /* global self, caches, fetch, Response, URL */
 
-const VERSION = "jc-v1";
+const VERSION = "jc-v2";
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const OFFLINE_URL = "/offline";
+
+// Routes that must never be served from cache: authenticated/dynamic areas
+// whose HTML embeds Server Action IDs that go stale on redeploy. A stale ID
+// produces "An unexpected response was received from the server" in PWA mode.
+const NEVER_CACHE_PATHS = ["/c/", "/e/", "/admin/"];
 
 // Precache the offline shell on install — everything else is fetched lazily.
 self.addEventListener("install", (event) => {
@@ -26,6 +31,12 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 /**
  * Strategy:
  *   - Navigation requests (HTML): network-first, fallback to cached page, then OFFLINE_URL.
@@ -46,7 +57,7 @@ self.addEventListener("fetch", (event) => {
   if (
     url.pathname.startsWith("/api/") ||
     url.pathname.startsWith("/auth/") ||
-    url.pathname.startsWith("/admin/")
+    NEVER_CACHE_PATHS.some((p) => url.pathname.startsWith(p))
   ) {
     return;
   }
