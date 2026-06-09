@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -47,12 +47,22 @@ const ITEMS: Record<Role, NavItem[]> = {
 export function SideNav({ role }: { role: Role }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [isNavPending, startNavTransition] = useTransition();
+  const [isLogoutPending, startLogoutTransition] = useTransition();
+  const [loadingHref, setLoadingHref] = useState<string | null>(null);
   const items = ITEMS[role];
   const homeHref = role === "candidate" ? "/c/home" : "/e/home";
 
+  const navigate = (href: string) => {
+    if (pathname === href || pathname.startsWith(`${href}/`)) return;
+    setLoadingHref(href);
+    startNavTransition(() => {
+      router.push(href);
+    });
+  };
+
   const handleLogout = () => {
-    startTransition(async () => {
+    startLogoutTransition(async () => {
       await logout();
     });
   };
@@ -78,11 +88,12 @@ export function SideNav({ role }: { role: Role }) {
         <ul className="space-y-1">
           {items.map(({ href, label, icon: Icon }) => {
             const active = isActive(href);
+            const loading = loadingHref === href && isNavPending;
             return (
               <li key={href}>
                 <button
                   type="button"
-                  onClick={() => router.push(href)}
+                  onClick={() => navigate(href)}
                   className={cn(
                     "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors text-left",
                     active
@@ -90,7 +101,11 @@ export function SideNav({ role }: { role: Role }) {
                       : "text-jc-text-secondary hover:bg-jc-light-green hover:text-jc-primary-green",
                   )}
                 >
-                  <Icon className="w-5 h-5 shrink-0" />
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 shrink-0 animate-spin" />
+                  ) : (
+                    <Icon className="w-5 h-5 shrink-0" />
+                  )}
                   <span className="truncate">{label}</span>
                 </button>
               </li>
@@ -103,16 +118,16 @@ export function SideNav({ role }: { role: Role }) {
         <button
           type="button"
           onClick={handleLogout}
-          disabled={isPending}
+          disabled={isLogoutPending}
           className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-jc-warning hover:bg-jc-warning/5 transition-colors disabled:opacity-50"
         >
-          {isPending ? (
+          {isLogoutPending ? (
             <Loader2 className="w-5 h-5 animate-spin shrink-0" />
           ) : (
             <LogOut className="w-5 h-5 shrink-0" />
           )}
           <span className="truncate">
-            {isPending ? "Déconnexion..." : "Se déconnecter"}
+            {isLogoutPending ? "Déconnexion..." : "Se déconnecter"}
           </span>
         </button>
       </div>
