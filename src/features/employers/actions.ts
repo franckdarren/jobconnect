@@ -9,11 +9,16 @@ import { db } from "@/lib/db";
 import {
   candidateProfiles,
   employerProfiles,
+  profileViews,
   whatsappContacts,
 } from "@/lib/db/schema";
-import { checkEmployerWhatsappQuota } from "@/lib/quotas";
+import {
+  checkEmployerProfileViewQuota,
+  checkEmployerWhatsappQuota,
+} from "@/lib/quotas";
 import { buildWhatsAppUrl, employerContactMessage } from "@/lib/whatsapp";
 import { createNotificationFor } from "@/features/notifications/actions";
+import { hasUnlockedCandidateToday } from "@/features/candidates/queries";
 import type { ActionResult } from "@/types";
 import {
   updateEmployerProfileSchema,
@@ -191,6 +196,100 @@ export async function contactCandidateOnWhatsApp(
     success: true,
     data: {
       whatsappUrl,
+      remaining:
+        quota.limit === Infinity ? "unlimited" : Math.max(0, quota.remaining - 1),
+    },
+  };
+}
+
+// =========================================================================
+// View candidate profile (Phase 7)
+// =========================================================================
+
+const viewCandidateSchema = z.object({
+  candidateId: z.string().uuid("Identifiant invalide"),
+});
+
+export type ViewCandidateResult = {
+  alreadyUnlocked: boolean;
+  remaining: number | "unlimited";
+};
+
+/**
+ * Unlock a candidate's full profile for the rest of the day. Idempotent per
+ * (employer, candidate, day) — if the employer already unlocked this candidate
+ * today, the action is a no-op and the daily quota is not re-consumed.
+ */
+export async function viewCandidateProfile(
+  candidateId: string,
+): Promise<ActionResult<ViewCandidateResult>> {
+  const user = await requireRole("employer");
+
+  const parsed = viewCandidateSchema.safeParse({ candidateId });
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message ?? "Entrée invalide" };
+  }
+
+  if (await hasUnlockedCandidateToday(user.id, parsed.data.candidateId)) {
+    const quota = await checkEmployerProfileViewQuota(user.id);
+    return {
+      success: true,
+      data: {
+        alreadyUnlocked: true,
+        remaining: quota.limit === Infinity ? "unlimited" : quota.remaining,
+      },
+    };
+  }
+
+  const quota = await checkEmployerProfileViewQuota(user.id);
+  if (!quota.allowed) {
+    return {
+      success: false,
+      error:
+        "Quota de profils débloqués atteint pour aujourd'hui. Passez à l'offre Pro pour un accès illimité.",
+      code: "QUOTA_REACHED",
+    };
+  }
+
+  const [candidate] = await db
+    .select({
+      userId: candidateProfiles.userId,
+      firstName: candidateProfiles.firstName,
+    })
+    .from(candidateProfiles)
+    .where(eq(candidateProfiles.userId, parsed.data.candidateId))
+    .limit(1);
+
+  if (!candidate) {
+    return { success: false, error: "Candidat introuvable", code: "NOT_FOUND" };
+  }
+
+  const [employer] = await db
+    .select({ companyName: employerProfiles.companyName })
+    .from(employerProfiles)
+    .where(eq(employerProfiles.userId, user.id))
+    .limit(1);
+
+  await db.insert(profileViews).values({
+    employerId: user.id,
+    candidateId: candidate.userId,
+  });
+
+  await createNotificationFor({
+    userId: candidate.userId,
+    type: "profile_viewed",
+    title: "Votre profil a été consulté",
+    message: `${employer?.companyName ?? "Une entreprise"} a consulté votre profil sur JobConnect.`,
+    metadata: {
+      employerId: user.id,
+      employerName: employer?.companyName ?? null,
+    },
+  });
+
+  return {
+    success: true,
+    data: {
+      alreadyUnlocked: false,
       remaining:
         quota.limit === Infinity ? "unlimited" : Math.max(0, quota.remaining - 1),
     },
