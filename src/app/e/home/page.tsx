@@ -47,7 +47,7 @@ export default async function EmployerHomePage() {
         </article>
       </div>
 
-      <section className="jc-card p-5 flex items-center justify-between gap-3">
+      <section className="jc-card p-5 space-y-3">
         <div>
           <h2 className="text-base font-bold">Publier votre 1ʳᵉ offre</h2>
           <p className="text-xs text-jc-text-secondary mt-0.5">
@@ -57,7 +57,7 @@ export default async function EmployerHomePage() {
         <Button
           asChild
           size="sm"
-          className="rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
+          className="w-full rounded-full bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white"
         >
           <Link href="/e/jobs/new">
             <Plus className="w-3 h-3 mr-1" />
