@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,7 @@ import {
   Trash2,
   Plus,
   Download,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -67,13 +68,12 @@ export function ProfileEditor({
 }: ProfileEditorProps) {
   const router = useRouter();
   const [isSaving, startSaving] = useTransition();
+  const [isUploading, startUpload] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState(profile.photoUrl ?? null);
   const [cvName, setCvName] = useState<string | null>(
     profile.cvUrl ? profile.cvUrl.split("/").pop() ?? "CV.pdf" : null,
   );
-  const avatarInputRef = useRef<HTMLInputElement | null>(null);
-  const cvInputRef = useRef<HTMLInputElement | null>(null);
-
   const [expModal, setExpModal] = useState<{
     open: boolean;
     item: CandidateExperience | null;
@@ -114,43 +114,49 @@ export function ProfileEditor({
     });
   };
 
-  const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await uploadAvatar(fd);
-    if (!res.success) {
-      toast.error(res.error);
-      return;
-    }
-    setAvatarUrl(res.data.url);
-    toast.success("Photo mise à jour");
-    router.refresh();
+    startUpload(async () => {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadAvatar(fd);
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+      setAvatarUrl(res.data.url);
+      toast.success("Photo mise à jour");
+      router.refresh();
+    });
   };
 
-  const onCvChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await uploadCv(fd);
-    if (!res.success) {
-      toast.error(res.error);
-      return;
-    }
-    setCvName(file.name);
-    toast.success("CV téléversé");
-    router.refresh();
+    startUpload(async () => {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadCv(fd);
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+      setCvName(file.name);
+      toast.success("CV téléversé");
+      router.refresh();
+    });
   };
 
-  const openCv = async () => {
-    const res = await getCvSignedUrl(120);
-    if (!res.success) {
-      toast.error(res.error);
-      return;
-    }
-    window.open(res.data.url, "_blank", "noopener,noreferrer");
+  const openCv = () => {
+    startUpload(async () => {
+      const res = await getCvSignedUrl(120);
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+      window.open(res.data.url, "_blank", "noopener,noreferrer");
+    });
   };
 
   const fullName =
@@ -183,21 +189,19 @@ export function ProfileEditor({
                   {fullName.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <button
-                type="button"
-                onClick={() => avatarInputRef.current?.click()}
-                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-jc-primary-green text-white flex items-center justify-center shadow-md"
+              <label
                 aria-label="Changer la photo"
+                className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-jc-primary-green text-white flex items-center justify-center shadow-md cursor-pointer ${isUploading ? "opacity-60 pointer-events-none" : ""}`}
               >
-                <Camera className="w-4 h-4" />
-              </button>
-              <input
-                ref={avatarInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                hidden
-                onChange={onAvatarChange}
-              />
+                {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  disabled={isUploading}
+                  onChange={onAvatarChange}
+                />
+              </label>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -361,8 +365,11 @@ export function ProfileEditor({
                   </button>
                   <button
                     type="button"
+                    disabled={deletingId === exp.id}
                     onClick={async () => {
+                      setDeletingId(exp.id);
                       const res = await deleteExperience(exp.id);
+                      setDeletingId(null);
                       if (!res.success) {
                         toast.error(res.error);
                         return;
@@ -371,9 +378,9 @@ export function ProfileEditor({
                       router.refresh();
                     }}
                     aria-label="Supprimer"
-                    className="text-jc-warning hover:opacity-80"
+                    className="text-jc-warning hover:opacity-80 disabled:opacity-40"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    {deletingId === exp.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                   </button>
                 </div>
               </article>
@@ -393,29 +400,26 @@ export function ProfileEditor({
           <button
             type="button"
             onClick={openCv}
-            className="mt-3 inline-flex items-center gap-1 max-w-full text-sm font-medium text-jc-primary-green hover:underline"
+            disabled={isUploading}
+            className="mt-3 inline-flex items-center gap-1 max-w-full text-sm font-medium text-jc-primary-green hover:underline disabled:opacity-60"
           >
-            <FileText className="w-4 h-4 shrink-0" />
+            {isUploading ? <Loader2 className="w-4 h-4 shrink-0 animate-spin" /> : <FileText className="w-4 h-4 shrink-0" />}
             <span className="truncate">{cvName}</span>
-            <Download className="w-3 h-3 ml-1 shrink-0" />
+            {!isUploading && <Download className="w-3 h-3 ml-1 shrink-0" />}
           </button>
         ) : null}
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="mt-3"
-          onClick={() => cvInputRef.current?.click()}
+        <label
+          className={`mt-3 inline-flex items-center justify-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium shadow-sm cursor-pointer transition-colors hover:bg-accent hover:text-accent-foreground ${isUploading ? "opacity-60 pointer-events-none" : ""}`}
         >
-          {cvName ? "Remplacer" : "Choisir un fichier"}
-        </Button>
-        <input
-          ref={cvInputRef}
-          type="file"
-          accept="application/pdf"
-          hidden
-          onChange={onCvChange}
-        />
+          {isUploading ? "Téléversement..." : cvName ? "Remplacer" : "Choisir un fichier"}
+          <input
+            type="file"
+            accept="application/pdf"
+            className="sr-only"
+            disabled={isUploading}
+            onChange={onCvChange}
+          />
+        </label>
       </section>
 
       {/* ===== Section : Formations ===== */}
@@ -461,8 +465,11 @@ export function ProfileEditor({
                   </button>
                   <button
                     type="button"
+                    disabled={deletingId === edu.id}
                     onClick={async () => {
+                      setDeletingId(edu.id);
                       const res = await deleteEducation(edu.id);
+                      setDeletingId(null);
                       if (!res.success) {
                         toast.error(res.error);
                         return;
@@ -471,9 +478,9 @@ export function ProfileEditor({
                       router.refresh();
                     }}
                     aria-label="Supprimer"
-                    className="text-jc-warning hover:opacity-80"
+                    className="text-jc-warning hover:opacity-80 disabled:opacity-40"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    {deletingId === edu.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                   </button>
                 </div>
               </article>

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, Search, LayoutGrid, User } from "lucide-react";
+import { useState, useTransition } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Home, Search, LayoutGrid, User, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Role = "candidate" | "employer";
@@ -29,18 +29,31 @@ const ITEMS: Record<Role, NavItem[]> = {
 };
 
 export function BottomNav({ role }: { role: Role }) {
+  const router = useRouter();
   const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
+  const [loadingHref, setLoadingHref] = useState<string | null>(null);
   const items = ITEMS[role];
+
+  const navigate = (href: string) => {
+    if (pathname === href || pathname.startsWith(`${href}/`)) return;
+    setLoadingHref(href);
+    startTransition(() => {
+      router.push(href);
+    });
+  };
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-black/5 pb-[env(safe-area-inset-bottom)]">
       <ul className="max-w-md mx-auto flex items-center justify-around px-2 py-2">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
+          const loading = loadingHref === href && isPending;
           return (
             <li key={href}>
-              <Link
-                href={href}
+              <button
+                type="button"
+                onClick={() => navigate(href)}
                 className={cn(
                   "flex flex-col items-center justify-center gap-0.5 rounded-full px-4 py-1.5 transition-colors min-w-[64px]",
                   active
@@ -48,9 +61,12 @@ export function BottomNav({ role }: { role: Role }) {
                     : "text-jc-text-secondary hover:text-jc-text-primary",
                 )}
               >
-                <Icon className="w-5 h-5" />
+                {loading
+                  ? <Loader2 className="w-5 h-5 animate-spin" />
+                  : <Icon className="w-5 h-5" />
+                }
                 <span className="text-[11px] font-medium">{label}</span>
-              </Link>
+              </button>
             </li>
           );
         })}

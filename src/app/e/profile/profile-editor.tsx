@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Save,
   BadgeCheck,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,6 +34,7 @@ type Props = {
 export function EmployerProfileEditor({ profile, phone }: Props) {
   const router = useRouter();
   const [isSaving, startSaving] = useTransition();
+  const [isUploading, startUpload] = useTransition();
   const [logoUrl, setLogoUrl] = useState(profile.logoUrl ?? null);
   const logoInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -62,19 +64,21 @@ export function EmployerProfileEditor({ profile, phone }: Props) {
     });
   };
 
-  const onLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await uploadLogo(fd);
-    if (!res.success) {
-      toast.error(res.error);
-      return;
-    }
-    setLogoUrl(res.data.url);
-    toast.success("Logo mis à jour");
-    router.refresh();
+    startUpload(async () => {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadLogo(fd);
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+      setLogoUrl(res.data.url);
+      toast.success("Logo mis à jour");
+      router.refresh();
+    });
   };
 
   return (
@@ -109,10 +113,11 @@ export function EmployerProfileEditor({ profile, phone }: Props) {
               <button
                 type="button"
                 onClick={() => logoInputRef.current?.click()}
-                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-jc-primary-dark text-white flex items-center justify-center shadow-md"
+                disabled={isUploading}
+                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-jc-primary-dark text-white flex items-center justify-center shadow-md disabled:opacity-60"
                 aria-label="Changer le logo"
               >
-                <Camera className="w-4 h-4" />
+                {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
               </button>
               <input
                 ref={logoInputRef}
