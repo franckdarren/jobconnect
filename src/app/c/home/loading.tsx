@@ -1,0 +1,50 @@
+export default function CandidateHomeLoading() {
+  return (
+    <div className="space-y-4 md:space-y-6 animate-pulse">
+      <header className="space-y-2">
+        <div className="h-7 md:h-8 w-2/3 max-w-sm rounded bg-jc-text-muted/20" />
+        <div className="h-4 w-3/4 max-w-md rounded bg-jc-text-muted/15" />
+      </header>
+
+      <div className="jc-card p-5 bg-jc-primary-dark/95 space-y-3">
+        <div className="h-4 w-24 rounded bg-white/15" />
+        <div className="h-6 w-3/4 rounded bg-white/20" />
+        <div className="h-3 w-2/3 rounded bg-white/15" />
+        <div className="h-10 w-40 rounded-xl bg-white/15 mt-2" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="jc-card p-4 space-y-2">
+            <div className="h-4 w-24 rounded bg-jc-text-muted/15" />
+            <div className="h-8 w-12 rounded bg-jc-text-muted/20" />
+          </div>
+        ))}
+      </div>
+
+      <section className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <div className="h-6 w-44 rounded bg-jc-text-muted/20" />
+          <div className="h-4 w-16 rounded bg-jc-text-muted/15" />
+        </div>
+        <ul className="grid gap-3 md:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <li key={i} className="jc-card p-4">
+              <div className="flex gap-3">
+                <div className="w-12 h-12 rounded-xl bg-jc-text-muted/20 shrink-0" />
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="h-4 w-3/4 rounded bg-jc-text-muted/20" />
+                  <div className="h-3 w-1/2 rounded bg-jc-text-muted/15" />
+                </div>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <div className="h-5 w-16 rounded-full bg-jc-text-muted/15" />
+                <div className="h-5 w-24 rounded-full bg-jc-text-muted/15" />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+}

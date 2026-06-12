@@ -1,20 +1,20 @@
 import Link from "next/link";
-import { Eye, Send, Sparkles, Briefcase, MapPin, Banknote, GraduationCap, Hammer } from "lucide-react";
+import { Eye, Send, Sparkles, Briefcase, Banknote, GraduationCap, Hammer, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
 import { getCandidateProfile, getCandidateProfileViewStats } from "@/features/candidates/queries";
 import { getCandidateApplicationStats } from "@/features/applications/queries";
-import { listActiveJobOffers } from "@/features/jobs/queries";
+import { recommendJobOffers } from "@/features/jobs/recommendations";
 import { HeroCard } from "@/components/shared/HeroCard";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
 
 export default async function CandidateHomePage() {
   const user = await requireRole("candidate");
-  const [data, viewStats, appStats, { rows: recentJobs }] = await Promise.all([
+  const [data, viewStats, appStats, recentJobs] = await Promise.all([
     getCandidateProfile(user.id),
     getCandidateProfileViewStats(user.id),
     getCandidateApplicationStats(user.id),
-    listActiveJobOffers(user.id, { pageSize: 4 }),
+    recommendJobOffers(user.id, { limit: 4 }),
   ]);
   const firstName = data?.profile.firstName ?? "";
 
@@ -125,6 +125,12 @@ export default async function CandidateHomePage() {
                         <TypeIcon className="w-3 h-3" />
                         {typeLabel}
                       </span>
+                      {job.matchedSkills > 0 ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-jc-primary-dark text-white text-[11px] font-semibold px-2 py-1">
+                          <Target className="w-3 h-3" />
+                          {job.matchedSkills} compétence{job.matchedSkills > 1 ? "s" : ""} en commun
+                        </span>
+                      ) : null}
                       {job.salaryLabel ? (
                         <span className="inline-flex items-center gap-1 text-xs font-semibold text-jc-text-primary">
                           <Banknote className="w-3.5 h-3.5 text-jc-primary-green" />

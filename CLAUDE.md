@@ -345,4 +345,56 @@ ADMIN_PASSWORD=
 
 ---
 
-*Dernière restructuration : 2026-06-03.*
+## 16. Recommandation d'offres
+
+Source : [`src/features/jobs/recommendations.ts`](src/features/jobs/recommendations.ts).
+
+### Principe
+
+Scoring SQL pondéré (pas de ML), exécuté à chaque chargement de la home candidat. Une seule requête, sous-requêtes corrélées sur des colonnes indexées. Aucune dépendance externe.
+
+### Signaux & pondérations
+
+| Signal | Poids | Source SQL |
+|---|---|---|
+| Compétence en commun (par skill) | **×15** | `count(candidate_skills ∩ job_offer_skills)` |
+| Même ville | **+20** | `lower(job.city) = lower(candidate.city)` |
+| Profession dans le titre | **+10** | `job.title ILIKE %candidate.profession%` |
+| Profession dans la description | **+5** | idem mais sur `description` (mutuellement exclusif avec ci-dessus) |
+| Fraîcheur < 7 j | **+5** | `published_at > now() - 7d` |
+| Fraîcheur 7–30 j | **+2** | `published_at > now() - 30d` |
+| Employeur vérifié | **+3** | `employer.is_verified` |
+
+Tri final : `score DESC, published_at DESC`.
+
+Constante exportée : `RECOMMENDATION_WEIGHTS` — toute modification se fait **uniquement** ici, jamais en SQL en dur.
+
+### Exclusions
+
+- Offres `status != 'active'`.
+- Offres déjà postulées par le candidat (sous-requête `NOT EXISTS` sur `applications`).
+
+### Dégradation gracieuse
+
+Si le candidat n'a ni skill, ni ville, ni profession → tous les scores tombent dans l'intervalle [0, 5+3] → le tri retombe naturellement sur `published_at DESC`, soit le même comportement que `listActiveJobOffers`. Pas de cas d'erreur, pas de branche conditionnelle côté appelant.
+
+### Quota / paywall
+
+`recommendJobOffers` **n'applique pas** le plafond `candidate_free` (10 offres visibles). Le cap reste appliqué par `listActiveJobOffers` sur `/c/jobs`. Sur la home, le widget « Recommandés pour vous » est un teaser de 4 cartes hors quota — c'est délibéré : la home pousse à l'engagement, pas à la frustration.
+
+### Où c'est utilisé
+
+- [`src/app/c/home/page.tsx`](src/app/c/home/page.tsx) — widget « Recommandés pour vous » (4 cartes, badge « X compétences en commun » si `matchedSkills > 0`).
+
+`/c/jobs` continue d'utiliser `listActiveJobOffers` (recherche/filtres explicites, plafond candidate_free).
+
+### Évolutions possibles
+
+- **Salaire attendu** : ajouter `expectedSalary` à `candidate_profiles`, pondérer +5 si `job.salary_min >= expected`.
+- **Type souhaité** : champ `preferredJobType` sur le profil candidat → +10 si match.
+- **Anti-doublon** : pénaliser les offres du même employeur que le candidat vient de voir/postuler.
+- **Matview** : si > ~10 000 offres actives, précalculer en cron nuit.
+
+---
+
+*Dernière restructuration : 2026-06-12 (ajout §16 recommandation).*
