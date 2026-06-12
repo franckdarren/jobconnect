@@ -128,7 +128,7 @@ export function ApplicationsList({
               </span>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-black/[0.04] grid grid-cols-3 gap-2">
+            <div className="mt-3 pt-3 border-t border-black/[0.04] grid grid-cols-3 gap-1.5">
               {a.status === "pending" ? (
                 <Button
                   type="button"
@@ -136,14 +136,14 @@ export function ApplicationsList({
                   size="sm"
                   disabled={pendingKey !== null}
                   onClick={() => onView(a.id)}
-                  className="text-xs"
+                  className="h-7 px-2 text-[11px] font-medium"
                 >
                   {pendingKey === `${a.id}-view` ? (
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                   ) : (
                     <Eye className="w-3 h-3 mr-1" />
                   )}
-                  Marquer vue
+                  Vue
                 </Button>
               ) : (
                 <span />
@@ -155,7 +155,7 @@ export function ApplicationsList({
                   size="sm"
                   disabled={pendingKey !== null}
                   onClick={() => onReject(a.id)}
-                  className="text-xs text-jc-warning border-jc-warning/30"
+                  className="h-7 px-2 text-[11px] font-medium text-jc-warning border-jc-warning/30"
                 >
                   {pendingKey === `${a.id}-reject` ? (
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
@@ -171,7 +171,7 @@ export function ApplicationsList({
                 href={buildWhatsAppUrl(phone, employerContactMessage(a.firstName))}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-md bg-[#25D366] hover:bg-[#1fbf5b] text-white text-xs font-semibold h-8 px-2"
+                className="inline-flex items-center justify-center rounded-md bg-[#25D366] hover:bg-[#1fbf5b] text-white text-[11px] font-semibold h-7 px-2"
               >
                 <MessageCircle className="w-3 h-3 mr-1" />
                 WhatsApp
