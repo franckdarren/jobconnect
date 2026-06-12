@@ -107,6 +107,7 @@ export async function createJobOffer(
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   revalidatePath("/e/home");
+  revalidatePath("/c/home");
   return { success: true, data: { id: created.id } };
 }
 
