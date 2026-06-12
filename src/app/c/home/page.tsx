@@ -66,7 +66,7 @@ export default async function CandidateHomePage() {
           </Link>
         </div>
         <div className="jc-card p-6 md:p-10 text-center text-sm text-jc-text-muted">
-          Les offres recommandées arriveront en Phase 5.
+          Aucune offre recommandée pour l'instant.
         </div>
       </section>
     </div>

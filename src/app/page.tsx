@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { Briefcase } from "lucide-react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
@@ -23,35 +24,48 @@ export default async function SplashPage() {
       if (u) redirect("/c/home");
     }
   } catch {
-    // ENV not ready yet — fall through to the static splash so the dev
-    // server still renders something useful before Supabase is configured.
+    // ENV not ready yet — fall through to the static splash.
   }
 
   return (
-    <div className="min-h-screen bg-jc-primary-dark text-white flex flex-col items-center justify-between p-8">
+    <div className="min-h-screen bg-[#0D1B2A] text-white flex flex-col items-center justify-between p-8">
       <div className="flex-1" />
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center">
-          <Briefcase className="w-9 h-9 text-white/70" />
+
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative">
+          <div className="w-24 h-24 rounded-3xl bg-white/10 flex items-center justify-center">
+            <Briefcase className="w-10 h-10 text-white/80" />
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#2E8B57] flex items-center justify-center">
+            <span className="text-white text-xs font-bold">J</span>
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-2xl font-bold">J</span>
-          <span className="w-10 h-0.5 bg-jc-accent-green rounded-full" />
+
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-2xl font-bold tracking-wide">JobConnect</span>
+          <span className="w-12 h-0.5 bg-[#2E8B57] rounded-full" />
         </div>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-end gap-3 pb-8">
-        <p className="text-white/70 font-semibold">L&apos;emploi direct au Gabon</p>
-        <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-jc-accent-green" />
-          <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
-          <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+
+      <div className="flex-1 flex flex-col items-center justify-end gap-6 pb-12 w-full max-w-xs">
+        <p className="text-white/60 text-sm font-medium text-center">
+          L&apos;emploi direct au Gabon
+        </p>
+
+        <div className="flex flex-col gap-3 w-full">
+          <Link
+            href="/login"
+            className="w-full py-3.5 rounded-xl bg-[#1E6B3C] text-white text-sm font-semibold text-center active:scale-95 transition-transform"
+          >
+            Se connecter
+          </Link>
+          <Link
+            href="/register"
+            className="w-full py-3.5 rounded-xl border border-white/20 text-white text-sm font-semibold text-center active:scale-95 transition-transform"
+          >
+            Créer un compte
+          </Link>
         </div>
-        <a
-          href="/login"
-          className="mt-6 text-xs font-medium text-white/60 underline-offset-4 hover:underline"
-        >
-          Continuer
-        </a>
       </div>
     </div>
   );
