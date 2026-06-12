@@ -18,12 +18,31 @@ import {
   candidateSkills,
   profileViews,
   skills,
+  subscriptions,
   users,
 } from "@/lib/db/schema";
 
 export type FullCandidateProfile = Awaited<
   ReturnType<typeof getCandidateProfile>
 >;
+
+/**
+ * Expression SQL `EXISTS(...)` qui vaut `true` ssi le candidat a une
+ * souscription `candidate_premium` active et non expirée.
+ *
+ * Centralisée ici parce qu'elle est utilisée à la fois dans le SELECT et
+ * dans le ORDER BY de `searchCandidates`. Garder une seule définition
+ * évite les divergences silencieuses entre tri et affichage.
+ */
+function isPremiumCandidateExpr(candidateIdCol: typeof candidateProfiles.userId) {
+  return sql<boolean>`exists (
+    select 1 from ${subscriptions} s
+    where s.user_id = ${candidateIdCol}
+      and s.plan = 'candidate_premium'
+      and s.status = 'active'
+      and s.expires_at >= now()
+  )`;
+}
 
 export async function getCandidateProfile(userId: string) {
   const [profile] = await db
@@ -32,27 +51,40 @@ export async function getCandidateProfile(userId: string) {
     .where(eq(candidateProfiles.userId, userId));
   if (!profile) return null;
 
-  const [experiences, educations, candidateSkillRows, user] = await Promise.all([
-    db
-      .select()
-      .from(candidateExperiences)
-      .where(eq(candidateExperiences.candidateId, userId))
-      .orderBy(desc(candidateExperiences.startDate)),
-    db
-      .select()
-      .from(candidateEducations)
-      .where(eq(candidateEducations.candidateId, userId))
-      .orderBy(desc(candidateEducations.endYear)),
-    db
-      .select({ skillId: candidateSkills.skillId })
-      .from(candidateSkills)
-      .where(eq(candidateSkills.candidateId, userId)),
-    db
-      .select({ phone: users.phone, email: users.email })
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1),
-  ]);
+  const [experiences, educations, candidateSkillRows, user, premiumRow] =
+    await Promise.all([
+      db
+        .select()
+        .from(candidateExperiences)
+        .where(eq(candidateExperiences.candidateId, userId))
+        .orderBy(desc(candidateExperiences.startDate)),
+      db
+        .select()
+        .from(candidateEducations)
+        .where(eq(candidateEducations.candidateId, userId))
+        .orderBy(desc(candidateEducations.endYear)),
+      db
+        .select({ skillId: candidateSkills.skillId })
+        .from(candidateSkills)
+        .where(eq(candidateSkills.candidateId, userId)),
+      db
+        .select({ phone: users.phone, email: users.email })
+        .from(users)
+        .where(eq(users.id, userId))
+        .limit(1),
+      db
+        .select({ id: subscriptions.id })
+        .from(subscriptions)
+        .where(
+          and(
+            eq(subscriptions.userId, userId),
+            eq(subscriptions.plan, "candidate_premium"),
+            eq(subscriptions.status, "active"),
+            gte(subscriptions.expiresAt, new Date()),
+          ),
+        )
+        .limit(1),
+    ]);
 
   const skillIds = candidateSkillRows.map((r) => r.skillId);
   const candidateSkillsList = skillIds.length
@@ -69,6 +101,8 @@ export async function getCandidateProfile(userId: string) {
     experiences,
     educations,
     skills: candidateSkillsList,
+    /** `true` ssi souscription `candidate_premium` active. Sert au badge ✦ employeur. */
+    isPremium: premiumRow.length > 0,
   };
 }
 
@@ -115,6 +149,13 @@ export type CandidateSearchRow = {
   profession: string | null;
   photoUrl: string | null;
   isBoosted: boolean;
+  /**
+   * Candidat avec abonnement `candidate_premium` actif. Dérivé d'une
+   * sous-requête `EXISTS` sur `subscriptions` — pas une colonne de
+   * `candidate_profiles`. Sert à la fois au tri (premium remonte) et à
+   * l'affichage du badge ✦ côté employeur.
+   */
+  isPremium: boolean;
   experienceLevel: "beginner" | "1_3" | "3_5" | "5_plus" | null;
   availability: "immediate" | "15_days" | "30_days" | null;
 };
@@ -168,6 +209,10 @@ export async function searchCandidates(
 
   const whereExpr = conditions.length ? and(...conditions) : undefined;
 
+  // Calculé une fois, réutilisé en SELECT et en ORDER BY pour qu'il n'y ait
+  // qu'une seule définition de "qu'est-ce qu'un candidat premium ?".
+  const isPremiumExpr = isPremiumCandidateExpr(candidateProfiles.userId);
+
   const [rowsRaw, [{ count }]] = await Promise.all([
     db
       .select({
@@ -178,12 +223,23 @@ export async function searchCandidates(
         profession: candidateProfiles.profession,
         photoUrl: candidateProfiles.photoUrl,
         isBoosted: candidateProfiles.isBoosted,
+        isPremium: isPremiumExpr,
         experienceLevel: candidateProfiles.experienceLevel,
         availability: candidateProfiles.availability,
       })
       .from(candidateProfiles)
       .where(whereExpr)
-      .orderBy(desc(candidateProfiles.isBoosted), desc(candidateProfiles.createdAt))
+      // Hiérarchie de visibilité :
+      //  1. Boost admin (éditorial / promo manuelle)
+      //  2. Premium payant (abonnement actif)
+      //  3. Récent (créé en dernier)
+      // Ainsi un boost admin reste prioritaire sur un premium, et un premium
+      // remonte au-dessus des comptes free récents.
+      .orderBy(
+        desc(candidateProfiles.isBoosted),
+        desc(isPremiumExpr),
+        desc(candidateProfiles.createdAt),
+      )
       .limit(pageSize)
       .offset((page - 1) * pageSize),
     db

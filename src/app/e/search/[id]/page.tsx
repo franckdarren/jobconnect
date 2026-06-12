@@ -18,6 +18,7 @@ import {
   hasUnlockedCandidateToday,
 } from "@/features/candidates/queries";
 import { checkEmployerProfileViewQuota } from "@/lib/quotas";
+import { PremiumBadge } from "@/components/shared/PremiumBadge";
 import { TrackedWhatsAppButton } from "@/components/shared/TrackedWhatsAppButton";
 import { UnlockButton } from "./unlock-button";
 
@@ -100,7 +101,12 @@ export default async function EmployerCandidateDetailPage({
               ) : null}
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold leading-tight">{displayName}</h1>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl font-bold leading-tight">{displayName}</h1>
+                {data.isPremium && unlocked ? (
+                  <PremiumBadge label="PREMIUM" variant="green" />
+                ) : null}
+              </div>
               {data.profile.profession ? (
                 <p className="text-sm text-white/80 mt-1">
                   {data.profile.profession}

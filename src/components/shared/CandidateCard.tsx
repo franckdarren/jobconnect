@@ -1,6 +1,7 @@
 import { MapPin, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LockOverlay } from "./LockOverlay";
+import { PremiumBadge } from "./PremiumBadge";
 import { TrackedWhatsAppButton } from "./TrackedWhatsAppButton";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +13,10 @@ export type CandidateCardCandidate = {
   city?: string | null;
   photoUrl?: string | null;
   whatsappPhone?: string | null;
+  /** Boost éditorial admin — étoile orange sur l'avatar. */
   isBoosted?: boolean;
+  /** Abonnement candidate_premium actif — badge ✦ à côté du nom. */
+  isPremium?: boolean;
 };
 
 type CandidateCardProps = {
@@ -51,9 +55,14 @@ export function CandidateCard({
             ) : null}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-jc-text-primary leading-tight">
-              {name}
-            </h3>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h3 className="font-bold text-jc-text-primary leading-tight">
+                {name}
+              </h3>
+              {candidate.isPremium && !locked ? (
+                <PremiumBadge label="PREMIUM" variant="green" />
+              ) : null}
+            </div>
             {candidate.profession ? (
               <p className="text-xs uppercase tracking-wide text-jc-text-secondary mt-0.5">
                 {candidate.profession}

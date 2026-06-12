@@ -152,6 +152,25 @@ Session : cookies httpOnly (Supabase SSR). Mot de passe hashé bcrypt par Supaba
 | `employer_free` | 0 | 3 profils/jour, 1 contact WA/mois, 1 offre active |
 | `employer_pro` | 15 000 FCFA/mois | Illimité + 5 offres + stats + badge vérifié |
 
+### Visibilité d'un candidat premium côté employeur
+
+`candidate_premium` n'est **pas** une colonne sur `candidate_profiles` — c'est dérivé d'un `EXISTS` sur `subscriptions` (plan = `candidate_premium`, status = `active`, `expires_at >= now()`).
+
+Source unique : `isPremiumCandidateExpr(...)` dans [`src/features/candidates/queries.ts`](src/features/candidates/queries.ts). Réutilisé :
+- dans `searchCandidates` (SELECT + ORDER BY) → un candidat premium remonte au-dessus des profils free récents ;
+- dans `getCandidateProfile` (via une petite requête séparée) → expose `isPremium: boolean` au sibling de `profile`.
+
+**Tri de la recherche candidat** (`searchCandidates`) :
+1. `isBoosted DESC` — boost admin (éditorial, manuel).
+2. `isPremium DESC` — abonnement actif.
+3. `createdAt DESC` — récence.
+
+Le boost admin garde la priorité absolue (cas d'usage : promo ciblée), le premium passe devant les comptes free. Le badge **✦ PREMIUM** apparaît à côté du nom dans `CandidateCard` et dans le header de `/e/search/[id]` (seulement si profil déverrouillé — sinon ça leak l'info à un employeur qui n'a pas dépensé son quota).
+
+⚠️ **Ne pas confondre** :
+- `candidate_profiles.isBoosted` = booléen admin, manuel.
+- `isPremium` = dérivé du plan via `EXISTS`. Pas de duplication, pas de cron à maintenir.
+
 API quotas (`src/lib/quotas.ts`) :
 ```ts
 checkCandidateApplicationQuota(userId): Promise<boolean>
