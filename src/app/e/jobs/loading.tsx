@@ -9,7 +9,7 @@ export default function EmployerJobsLoading() {
         <div className="h-10 w-36 rounded-full bg-jc-text-muted/20" />
       </header>
 
-      <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <li key={i} className="jc-card p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">

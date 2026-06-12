@@ -67,7 +67,7 @@ export default async function EmployerJobsPage() {
           </Button>
         </div>
       ) : (
-        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {offers.map((o) => (
             <li key={o.id}>
               <Link

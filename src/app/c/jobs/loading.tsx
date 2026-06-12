@@ -12,7 +12,7 @@ export default function JobsListLoading() {
         <div className="h-10 w-10 rounded-xl bg-jc-text-muted/15" />
       </div>
 
-      <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <li key={i} className="jc-card overflow-hidden">
             <div className="p-4 flex gap-3">

@@ -17,7 +17,7 @@ export default function EmployerSearchLoading() {
         <div className="h-3 w-40 rounded bg-jc-text-muted/15" />
       </div>
 
-      <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
           <li key={i} className="jc-card p-4">
             <div className="flex items-start gap-3">
