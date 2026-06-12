@@ -37,7 +37,7 @@ export default async function JobDetailPage({
     <button
       type="button"
       disabled
-      className="w-full rounded-xl bg-jc-primary-green/30 text-jc-primary-green font-semibold py-3 text-sm border border-jc-primary-green/40"
+      className="w-full rounded-xl bg-jc-light-green text-jc-primary-green font-semibold py-3 text-sm border border-jc-primary-green/40"
     >
       ✓ Candidature envoyée
     </button>
