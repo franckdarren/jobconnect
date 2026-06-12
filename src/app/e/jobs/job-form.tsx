@@ -53,6 +53,7 @@ const TYPE_OPTIONS: { value: "job" | "internship" | "freelance"; label: string; 
 export function JobForm({ mode, jobId, defaults }: JobFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [skills, setSkills] = useState<SkillOption[]>(defaults?.skills ?? []);
   const [skillDraft, setSkillDraft] = useState("");
   const [missions, setMissions] = useState<string[]>(defaults?.missions ?? []);
@@ -88,24 +89,29 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
 
   const onAddSkill = async () => {
     const name = skillDraft.trim();
-    if (!name) return;
+    if (!name || isAddingSkill) return;
     if (skills.some((s) => s.name.toLowerCase() === name.toLowerCase())) {
       setSkillDraft("");
       return;
     }
-    const res = await getOrCreateSkill(name);
-    if (!res.success) {
-      toast.error(res.error);
-      return;
+    setIsAddingSkill(true);
+    try {
+      const res = await getOrCreateSkill(name);
+      if (!res.success) {
+        toast.error(res.error);
+        return;
+      }
+      const next = [...skills, res.data];
+      setSkills(next);
+      setValue(
+        "skillIds",
+        next.map((s) => s.id),
+        { shouldDirty: true },
+      );
+      setSkillDraft("");
+    } finally {
+      setIsAddingSkill(false);
     }
-    const next = [...skills, res.data];
-    setSkills(next);
-    setValue(
-      "skillIds",
-      next.map((s) => s.id),
-      { shouldDirty: true },
-    );
-    setSkillDraft("");
   };
 
   const removeSkill = (id: string) => {
@@ -359,16 +365,24 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
                     void onAddSkill();
                   }
                 }}
+                disabled={isAddingSkill}
                 placeholder="Ajouter une compétence..."
-                className="flex-1 min-w-0 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none"
+                className="flex-1 min-w-0 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none disabled:opacity-60"
               />
               <Button
                 type="button"
                 onClick={onAddSkill}
+                disabled={isAddingSkill}
                 className="shrink-0 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white px-3 sm:px-4"
               >
-                <Plus className="w-4 h-4 sm:hidden" />
-                <span className="hidden sm:inline">Ajouter</span>
+                {isAddingSkill ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4 sm:hidden" />
+                    <span className="hidden sm:inline">Ajouter</span>
+                  </>
+                )}
               </Button>
             </div>
           </div>

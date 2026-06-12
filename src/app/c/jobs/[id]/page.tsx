@@ -67,7 +67,7 @@ export default async function JobDetailPage({
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <span className="font-bold text-lg">JobConnect</span>
+        <span className="font-bold text-lg">Détails de l'offre</span>
       </header>
 
       <Link
