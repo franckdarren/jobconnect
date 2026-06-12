@@ -36,20 +36,26 @@ export default async function EmployerHomePage() {
       </HeroCard>
 
       <div className="grid grid-cols-2 gap-3 md:gap-4">
-        <article className="jc-card p-4">
+        <Link
+          href="/e/jobs"
+          className="jc-card p-4 hover:shadow-md active:scale-[0.99] transition-all"
+        >
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Eye className="w-4 h-4" />
             Offres actives
           </div>
           <p className="text-3xl font-bold mt-1">{stats.activeJobs}</p>
-        </article>
-        <article className="jc-card p-4">
+        </Link>
+        <Link
+          href="/e/dashboard"
+          className="jc-card p-4 hover:shadow-md active:scale-[0.99] transition-all"
+        >
           <div className="flex items-center gap-2 text-sm text-jc-orange font-medium">
             <Send className="w-4 h-4" />
             Candidatures reçues
           </div>
           <p className="text-3xl font-bold mt-1">{stats.applicationsTotal}</p>
-        </article>
+        </Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 md:gap-6">
