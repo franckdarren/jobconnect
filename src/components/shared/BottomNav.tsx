@@ -53,6 +53,8 @@ export function BottomNav({ role }: { role: Role }) {
             <li key={href}>
               <button
                 type="button"
+                aria-label={label}
+                aria-current={active ? "page" : undefined}
                 onClick={() => navigate(href)}
                 className={cn(
                   "flex flex-col items-center justify-center gap-0.5 rounded-full px-4 py-1.5 transition-colors min-w-[64px]",

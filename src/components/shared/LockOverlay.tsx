@@ -1,15 +1,17 @@
-import { Lock } from "lucide-react";
+import { Lock, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type LockOverlayProps = {
   label?: string;
   className?: string;
+  isLoading?: boolean;
   onUnlock?: () => void;
 };
 
 export function LockOverlay({
   label = "DÉBLOQUER AVEC PRO",
   className,
+  isLoading = false,
   onUnlock,
 }: LockOverlayProps) {
   return (
@@ -22,12 +24,20 @@ export function LockOverlay({
       <button
         type="button"
         onClick={onUnlock}
-        className="flex flex-col items-center gap-2 text-jc-text-primary"
+        disabled={isLoading}
+        aria-label={label}
+        className="flex flex-col items-center gap-2 text-jc-text-primary disabled:opacity-60"
       >
         <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center">
-          <Lock className="w-4 h-4" />
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Lock className="w-4 h-4" />
+          )}
         </div>
-        <span className="text-[11px] font-bold tracking-wide">{label}</span>
+        <span className="text-[11px] font-bold tracking-wide">
+          {isLoading ? "Chargement..." : label}
+        </span>
       </button>
     </div>
   );

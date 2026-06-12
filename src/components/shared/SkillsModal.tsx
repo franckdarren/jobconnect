@@ -124,10 +124,11 @@ export function SkillsModal({
                     type="button"
                     key={s.id}
                     onClick={() => remove(s.id)}
+                    aria-label={`Retirer ${s.name}`}
                     className="inline-flex items-center gap-1 rounded-full bg-jc-primary-green text-white text-xs font-medium px-3 py-1.5"
                   >
                     {s.name}
-                    <X className="w-3 h-3" />
+                    <X className="w-3 h-3" aria-hidden="true" />
                   </button>
                 ))}
               </div>

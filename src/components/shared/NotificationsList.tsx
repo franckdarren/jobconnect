@@ -73,20 +73,22 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
   const router = useRouter();
   const [items, setItems] = useState<Notif[]>(initial);
   const [isPending, startTransition] = useTransition();
+  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const hasUnread = items.some((n) => !n.isRead);
 
   const onMarkOne = (id: string) => {
     const target = items.find((n) => n.id === id);
     if (!target || target.isRead) return;
+    setLoadingId(id);
     setItems((prev) =>
       prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
     );
     startTransition(async () => {
       const res = await markAsRead(id);
+      setLoadingId(null);
       if (!res.success) {
         toast.error(res.error);
-        // Revert optimistic update on failure
         setItems((prev) =>
           prev.map((n) => (n.id === id ? { ...n, isRead: false } : n)),
         );
@@ -149,13 +151,16 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
         {items.map((n) => {
           const meta = ICON_BY_TYPE[n.type];
           const Icon = meta.icon;
+          const isItemLoading = loadingId === n.id;
           return (
             <li key={n.id}>
               <button
                 type="button"
                 onClick={() => onMarkOne(n.id)}
+                disabled={isItemLoading || isPending}
+                aria-label={n.isRead ? n.title : `Marquer comme lu : ${n.title}`}
                 className={cn(
-                  "w-full text-left jc-card p-3 flex items-start gap-3 transition-colors",
+                  "w-full text-left jc-card p-3 flex items-start gap-3 transition-colors disabled:cursor-default",
                   !n.isRead && "bg-jc-light-green/40 ring-1 ring-jc-primary-green/20",
                 )}
               >
@@ -165,7 +170,11 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
                     meta.color,
                   )}
                 >
-                  <Icon className="w-4 h-4" />
+                  {isItemLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Icon className="w-4 h-4" />
+                  )}
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">

@@ -37,6 +37,7 @@ export function UnlockButton({ candidateId, remaining }: UnlockButtonProps) {
       type="button"
       onClick={onClick}
       disabled={isPending}
+      aria-label={isPending ? "Déverrouillage en cours..." : label}
       className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-jc-primary-green hover:bg-jc-primary-green/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold px-4 py-3 text-sm transition-colors"
     >
       {isPending ? (

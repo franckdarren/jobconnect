@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IconInput } from "@/components/shared/IconInput";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,8 @@ export function JobsFilters({
   const [q, setQ] = useState(defaultQ);
   const [city, setCity] = useState(defaultCity);
   const [type, setType] = useState<FilterType>(defaultType);
+  const [isPending, startTransition] = useTransition();
+  const [loadingType, setLoadingType] = useState<FilterType | null>(null);
 
   const apply = (next: { q?: string; city?: string; type?: FilterType }) => {
     const params = new URLSearchParams();
@@ -38,7 +40,9 @@ export function JobsFilters({
     if (finalQ) params.set("q", finalQ);
     if (finalCity) params.set("city", finalCity);
     if (finalType && finalType !== "all") params.set("type", finalType);
-    router.push(`/c/jobs${params.size ? `?${params.toString()}` : ""}`);
+    startTransition(() => {
+      router.push(`/c/jobs${params.size ? `?${params.toString()}` : ""}`);
+    });
   };
 
   return (
@@ -66,21 +70,27 @@ export function JobsFilters({
       <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-1 scrollbar-thin">
         {TYPE_TABS.map((t) => {
           const active = t.value === type;
+          const loading = loadingType === t.value && isPending;
           return (
             <button
               key={t.value}
               type="button"
+              aria-label={`Filtrer par : ${t.label}`}
+              aria-pressed={active}
+              disabled={isPending}
               onClick={() => {
                 setType(t.value);
+                setLoadingType(t.value);
                 apply({ type: t.value });
               }}
               className={cn(
-                "shrink-0 rounded-full px-4 h-9 text-sm font-semibold transition-colors",
+                "shrink-0 inline-flex items-center gap-1.5 rounded-full px-4 h-9 text-sm font-semibold transition-colors disabled:opacity-70",
                 active
                   ? "bg-jc-primary-dark text-white"
                   : "bg-jc-background border border-black/[0.06] text-jc-text-secondary",
               )}
             >
+              {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
               {t.label}
             </button>
           );

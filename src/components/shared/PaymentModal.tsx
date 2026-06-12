@@ -166,6 +166,8 @@ export function PaymentModal({ open, onOpenChange, plan }: PaymentModalProps) {
                       type="button"
                       key={op.value}
                       onClick={() => setOperator(op.value)}
+                      aria-label={`Payer avec ${op.label}`}
+                      aria-pressed={active}
                       className={cn(
                         "rounded-xl border-2 p-3 text-sm font-semibold transition-all",
                         active

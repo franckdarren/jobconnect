@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, X } from "lucide-react";
+import { Download, Loader2, X } from "lucide-react";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -32,6 +32,7 @@ export function InstallPwaBanner() {
   // iOS check is UA-only and never changes after mount — initialise lazily.
   const [iosHint] = useState<boolean>(isIosSafariUserAgent);
   const [visible, setVisible] = useState(false);
+  const [isInstalling, setIsInstalling] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -61,8 +62,10 @@ export function InstallPwaBanner() {
 
   const onInstall = async () => {
     if (!deferred) return;
+    setIsInstalling(true);
     await deferred.prompt();
     const { outcome } = await deferred.userChoice;
+    setIsInstalling(false);
     if (outcome === "accepted") {
       setDeferred(null);
       setVisible(false);
@@ -97,9 +100,14 @@ export function InstallPwaBanner() {
           <button
             type="button"
             onClick={onInstall}
-            className="mt-2 inline-flex items-center justify-center rounded-full bg-jc-primary-green hover:bg-jc-primary-green/90 text-white text-xs font-semibold px-4 py-1.5"
+            disabled={isInstalling}
+            aria-label="Installer l'application JobConnect"
+            className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-jc-primary-green hover:bg-jc-primary-green/90 disabled:opacity-60 text-white text-xs font-semibold px-4 py-1.5"
           >
-            Installer
+            {isInstalling ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : null}
+            {isInstalling ? "Installation..." : "Installer"}
           </button>
         ) : null}
       </div>

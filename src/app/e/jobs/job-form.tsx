@@ -11,6 +11,7 @@ import {
   GraduationCap,
   MapPin,
   Banknote,
+  Calendar,
   FileUp,
   X,
   Plus,
@@ -277,20 +278,35 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
             error={errors.salaryLabel?.message}
             {...register("salaryLabel")}
           />
-          <div className="grid grid-cols-2 gap-3">
+          <IconInput
+            icon={<Calendar className="w-4 h-4" />}
+            label="Date d'expiration (facultatif)"
+            type="date"
+            error={errors.expiresAt?.message}
+            {...register("expiresAt")}
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <IconInput
               label="Min (FCFA)"
               type="number"
+              inputMode="numeric"
               placeholder="500000"
               error={errors.salaryMin?.message}
-              {...register("salaryMin", { valueAsNumber: true })}
+              {...register("salaryMin", {
+                setValueAs: (v: string) =>
+                  v === "" ? undefined : parseInt(v, 10) || undefined,
+              })}
             />
             <IconInput
               label="Max (FCFA)"
               type="number"
+              inputMode="numeric"
               placeholder="800000"
               error={errors.salaryMax?.message}
-              {...register("salaryMax", { valueAsNumber: true })}
+              {...register("salaryMax", {
+                setValueAs: (v: string) =>
+                  v === "" ? undefined : parseInt(v, 10) || undefined,
+              })}
             />
           </div>
         </section>
@@ -344,14 +360,15 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
                   }
                 }}
                 placeholder="Ajouter une compétence..."
-                className="flex-1 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none"
+                className="flex-1 min-w-0 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none"
               />
               <Button
                 type="button"
                 onClick={onAddSkill}
-                className="rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white px-4"
+                className="shrink-0 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white px-3 sm:px-4"
               >
-                Ajouter
+                <Plus className="w-4 h-4 sm:hidden" />
+                <span className="hidden sm:inline">Ajouter</span>
               </Button>
             </div>
           </div>
@@ -392,15 +409,15 @@ export function JobForm({ mode, jobId, defaults }: JobFormProps) {
                   }
                 }}
                 placeholder="Décrire une mission..."
-                className="flex-1 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none"
+                className="flex-1 min-w-0 h-11 rounded-xl bg-[#f0f4f8] px-3 text-sm outline-none"
               />
               <Button
                 type="button"
                 onClick={onAddMission}
-                className="rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white px-4"
+                className="shrink-0 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white px-3 sm:px-4"
               >
-                <Plus className="w-3 h-3 mr-1" />
-                Ajouter
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline ml-1">Ajouter</span>
               </Button>
             </div>
           </div>

@@ -59,6 +59,7 @@ export function ApplyButton({
         type="button"
         onClick={onClick}
         disabled={isPending}
+        aria-label={isPending ? "Envoi de la candidature en cours..." : "Postuler via WhatsApp"}
         className="w-full rounded-xl bg-[#25D366] hover:bg-[#1fbf5b] text-white font-semibold py-3 text-sm transition-colors flex items-center justify-center gap-2 shadow-lg disabled:opacity-60"
       >
         {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
