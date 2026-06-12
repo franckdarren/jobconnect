@@ -1,8 +1,23 @@
+const GABON_COUNTRY_CODE = "241";
+
 /**
- * Normalize a phone for wa.me — keep only digits, drop leading +.
+ * Normalize a phone for wa.me. wa.me requires E.164 digits only (no '+').
+ * Defaults to Gabon (+241) when no country code is detected.
+ *
+ * Examples:
+ *   "+24177123456" → "24177123456"
+ *   "24177123456"  → "24177123456"
+ *   "077123456"    → "24177123456"  (drop leading 0, prepend 241)
+ *   "77123456"     → "24177123456"  (prepend 241)
+ *   "0024177..."   → "24177..."     (drop international 00 prefix)
  */
 function normalizePhone(phone: string): string {
-  return phone.replace(/[^\d]/g, "");
+  let digits = phone.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  if (digits.startsWith(GABON_COUNTRY_CODE)) return digits;
+  if (digits.startsWith("0")) return `${GABON_COUNTRY_CODE}${digits.slice(1)}`;
+  if (digits.length <= 9) return `${GABON_COUNTRY_CODE}${digits}`;
+  return digits;
 }
 
 export function buildWhatsAppUrl(phone: string, message: string): string {
