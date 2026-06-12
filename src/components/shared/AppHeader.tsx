@@ -9,12 +9,18 @@ const PREFIX: Record<Role, string> = {
   employer: "/e",
 };
 
-export function AppHeader({ role }: { role: Role }) {
+export function AppHeader({
+  role,
+  isPremium = false,
+}: {
+  role: Role;
+  isPremium?: boolean;
+}) {
   const prefix = PREFIX[role];
   return (
     <header className="md:hidden sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-black/4">
       <div className="max-w-md mx-auto flex items-center justify-between px-4 h-14">
-        <NavMenu role={role} />
+        <NavMenu role={role} isPremium={isPremium} />
         <Link
           href={`${prefix}/home`}
           className="font-bold text-lg text-jc-text-primary tracking-tight"

@@ -44,13 +44,22 @@ const ITEMS: Record<Role, NavItem[]> = {
   ],
 };
 
-export function SideNav({ role }: { role: Role }) {
+export function SideNav({
+  role,
+  isPremium = false,
+}: {
+  role: Role;
+  isPremium?: boolean;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [isNavPending, startNavTransition] = useTransition();
   const [isLogoutPending, startLogoutTransition] = useTransition();
   const [loadingHref, setLoadingHref] = useState<string | null>(null);
-  const items = ITEMS[role];
+  const upgradeHref = role === "candidate" ? "/c/upgrade" : "/e/upgrade";
+  const items = isPremium
+    ? ITEMS[role].filter((it) => it.href !== upgradeHref)
+    : ITEMS[role];
   const homeHref = role === "candidate" ? "/c/home" : "/e/home";
 
   const navigate = (href: string) => {

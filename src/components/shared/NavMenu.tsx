@@ -45,11 +45,20 @@ const ITEMS: Record<Role, NavItem[]> = {
   ],
 };
 
-export function NavMenu({ role }: { role: Role }) {
+export function NavMenu({
+  role,
+  isPremium = false,
+}: {
+  role: Role;
+  isPremium?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const items = ITEMS[role];
+  const upgradeHref = role === "candidate" ? "/c/upgrade" : "/e/upgrade";
+  const items = isPremium
+    ? ITEMS[role].filter((it) => it.href !== upgradeHref)
+    : ITEMS[role];
 
   const navigate = (href: string) => {
     setOpen(false);
