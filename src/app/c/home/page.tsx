@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye, Send, Sparkles, Briefcase, MapPin } from "lucide-react";
+import { Eye, Send, Sparkles, Briefcase, MapPin, Banknote, GraduationCap, Hammer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
 import { getCandidateProfile, getCandidateProfileViewStats } from "@/features/candidates/queries";
@@ -77,37 +77,66 @@ export default async function CandidateHomePage() {
             Aucune offre disponible pour l&apos;instant.
           </div>
         ) : (
-          <div className="space-y-2">
-            {recentJobs.map((job) => (
-              <Link
-                key={job.id}
-                href={`/c/jobs/${job.id}`}
-                className="jc-card p-4 flex items-center gap-3 hover:shadow-md transition-shadow"
-              >
-                <div className="w-10 h-10 rounded-xl bg-jc-light-green flex items-center justify-center shrink-0">
-                  <Briefcase className="w-5 h-5 text-jc-primary-green" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate">{job.title}</p>
-                  <div className="flex items-center gap-1 text-xs text-jc-text-muted mt-0.5">
-                    {job.city ? (
-                      <>
-                        <MapPin className="w-3 h-3" />
-                        <span>{job.city}</span>
-                        <span className="mx-1">·</span>
-                      </>
-                    ) : null}
-                    <span>{job.companyName ?? "Entreprise"}</span>
-                  </div>
-                </div>
-                {job.salaryLabel ? (
-                  <span className="text-xs font-semibold text-jc-primary-green shrink-0">
-                    {job.salaryLabel}
-                  </span>
-                ) : null}
-              </Link>
-            ))}
-          </div>
+          <ul className="grid gap-3 md:grid-cols-2">
+            {recentJobs.map((job) => {
+              const TypeIcon =
+                job.type === "internship"
+                  ? GraduationCap
+                  : job.type === "freelance"
+                    ? Hammer
+                    : Briefcase;
+              const typeLabel =
+                job.type === "internship"
+                  ? "Stage"
+                  : job.type === "freelance"
+                    ? "Freelance"
+                    : "Emploi";
+              return (
+                <li key={job.id}>
+                  <Link
+                    href={`/c/jobs/${job.id}`}
+                    className="jc-card block p-4 hover:shadow-md active:scale-[0.99] transition-all"
+                  >
+                    <div className="flex gap-3">
+                      <div className="shrink-0 w-12 h-12 rounded-xl bg-jc-background flex items-center justify-center overflow-hidden">
+                        {job.companyLogoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={job.companyLogoUrl}
+                            alt={job.companyName ?? "Entreprise"}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Briefcase className="w-5 h-5 text-jc-text-muted" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-sm text-jc-text-primary leading-tight line-clamp-2">
+                          {job.title}
+                        </h3>
+                        <p className="text-xs text-jc-text-secondary mt-1 truncate">
+                          {job.companyName ?? "Entreprise"}
+                          {job.city ? ` • ${job.city}` : null}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-jc-light-green text-jc-primary-green text-[11px] font-semibold px-2 py-1">
+                        <TypeIcon className="w-3 h-3" />
+                        {typeLabel}
+                      </span>
+                      {job.salaryLabel ? (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-jc-text-primary">
+                          <Banknote className="w-3.5 h-3.5 text-jc-primary-green" />
+                          {job.salaryLabel}
+                        </span>
+                      ) : null}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </section>
     </div>
