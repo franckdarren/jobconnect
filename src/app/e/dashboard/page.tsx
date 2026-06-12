@@ -75,7 +75,7 @@ export default async function EmployerDashboardPage() {
           <div className="flex items-start gap-2 text-sm text-jc-primary-dark font-medium">
             <Eye className="w-4 h-4 shrink-0 mt-0.5" />
             <div className="min-w-0 md:flex md:items-center md:gap-2 md:flex-wrap">
-              <span className="block leading-snug">Profils débloqués</span>
+              <span className="block leading-snug">Profils</span>
               {!isPro ? (
                 <PremiumBadge
                   label="PRO"

@@ -142,14 +142,14 @@ export function ApplicationsList({
                   size="sm"
                   disabled={pendingKey !== null}
                   onClick={() => onView(a.id)}
-                  className="h-7 px-2 text-[11px] font-medium"
+                  className="h-7 w-full min-w-0 px-1.5 text-[11px] font-medium"
                 >
                   {pendingKey === `${a.id}-view` ? (
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                   ) : (
                     <Eye className="w-3 h-3 mr-1" />
                   )}
-                  Vue
+                  <span className="truncate">Vue</span>
                 </Button>
               ) : (
                 <span />
@@ -161,14 +161,14 @@ export function ApplicationsList({
                   size="sm"
                   disabled={pendingKey !== null}
                   onClick={() => onReject(a.id)}
-                  className="h-7 px-2 text-[11px] font-medium text-jc-warning border-jc-warning/30"
+                  className="h-7 w-full min-w-0 px-1.5 text-[11px] font-medium text-jc-warning border-jc-warning/30"
                 >
                   {pendingKey === `${a.id}-reject` ? (
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                   ) : (
                     <X className="w-3 h-3 mr-1" />
                   )}
-                  Rejeter
+                  <span className="truncate">Rejeter</span>
                 </Button>
               ) : (
                 <span />
@@ -177,10 +177,10 @@ export function ApplicationsList({
                 href={buildWhatsAppUrl(phone, employerContactMessage(a.firstName))}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-md bg-[#25D366] hover:bg-[#1fbf5b] text-white text-[11px] font-semibold h-7 px-2"
+                className="flex w-full min-w-0 items-center justify-center rounded-md bg-[#25D366] hover:bg-[#1fbf5b] text-white text-[11px] font-semibold h-7 px-1.5"
               >
-                <MessageCircle className="w-3 h-3 mr-1" />
-                WhatsApp
+                <MessageCircle className="w-3 h-3 mr-1 shrink-0" />
+                <span className="truncate">WhatsApp</span>
               </a>
             </div>
           </li>

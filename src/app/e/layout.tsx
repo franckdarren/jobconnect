@@ -18,7 +18,7 @@ export default async function EmployerLayout({
       <SideNav role="employer" isPremium={isPro} />
       <div className="flex-1 flex flex-col min-w-0">
         <AppHeader role="employer" isPremium={isPro} />
-        <main className="flex-1 w-full mx-auto px-4 md:px-6 lg:px-8 pt-4 md:pt-6 pb-24 md:pb-10 max-w-md md:max-w-4xl lg:max-w-6xl">
+        <main className="flex-1 w-full mx-auto overflow-x-clip px-4 md:px-6 lg:px-8 pt-4 md:pt-6 pb-24 md:pb-10 max-w-md md:max-w-4xl lg:max-w-6xl">
           {children}
         </main>
       </div>

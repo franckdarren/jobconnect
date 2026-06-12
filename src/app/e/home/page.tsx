@@ -98,7 +98,7 @@ export default async function EmployerHomePage() {
         >
           <div className="flex items-center gap-2 text-sm text-jc-orange font-medium">
             <Send className="w-4 h-4" />
-            Candidatures reçues
+            Candidatures
           </div>
           <p className="text-3xl font-bold mt-1">{stats.applicationsTotal}</p>
         </Link>
