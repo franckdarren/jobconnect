@@ -2,13 +2,16 @@ import Link from "next/link";
 import { Sparkles, Send, Eye, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
-import { getEmployerProfile } from "@/features/employers/queries";
+import { getEmployerProfile, getEmployerStats } from "@/features/employers/queries";
 import { HeroCard } from "@/components/shared/HeroCard";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
 
 export default async function EmployerHomePage() {
   const user = await requireRole("employer");
-  const data = await getEmployerProfile(user.id);
+  const [data, stats] = await Promise.all([
+    getEmployerProfile(user.id),
+    getEmployerStats(user.id),
+  ]);
   const companyName = data?.profile.companyName ?? "";
 
   return (
@@ -24,7 +27,7 @@ export default async function EmployerHomePage() {
             <p className="text-[11px] text-white/70 mt-1">Candidatures illimitées</p>
           </div>
           <div className="rounded-xl bg-white/10 px-3 py-2">
-            <p className="text-2xl font-bold leading-none">0</p>
+            <p className="text-2xl font-bold leading-none">{stats.profileViewsToday}</p>
             <p className="text-[11px] text-white/70 mt-1">Vues profil (24h)</p>
           </div>
         </div>
@@ -36,14 +39,14 @@ export default async function EmployerHomePage() {
             <Eye className="w-4 h-4" />
             Offres actives
           </div>
-          <p className="text-3xl font-bold mt-1">0</p>
+          <p className="text-3xl font-bold mt-1">{stats.activeJobs}</p>
         </article>
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-orange font-medium">
             <Send className="w-4 h-4" />
             Candidatures reçues
           </div>
-          <p className="text-3xl font-bold mt-1">0</p>
+          <p className="text-3xl font-bold mt-1">{stats.applicationsTotal}</p>
         </article>
       </div>
 
