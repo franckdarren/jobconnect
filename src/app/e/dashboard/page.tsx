@@ -72,17 +72,11 @@ export default async function EmployerDashboardPage() {
           </p>
         </article>
         <article className="jc-card p-4 relative overflow-hidden min-w-0">
-          <div className="flex items-start gap-2 text-sm text-jc-primary-dark font-medium">
-            <Eye className="w-4 h-4 shrink-0 mt-0.5" />
-            <div className="min-w-0 md:flex md:items-center md:gap-2 md:flex-wrap">
-              <span className="block leading-snug">Profils</span>
-              {!isPro ? (
-                <PremiumBadge
-                  label="PRO"
-                  variant="dark"
-                  className="mt-1 md:mt-0"
-                />
-              ) : null}
+          <div className="flex items-center gap-2 text-sm text-jc-primary-dark font-medium">
+            <Eye className="w-4 h-4 shrink-0" />
+            <div className="min-w-0 flex items-center gap-1.5 flex-wrap">
+              <span className="leading-snug">Profils</span>
+              {!isPro ? <PremiumBadge label="PRO" variant="dark" /> : null}
             </div>
           </div>
           <p className="text-3xl font-bold mt-1">
