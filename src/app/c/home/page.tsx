@@ -5,18 +5,21 @@ import { requireRole } from "@/lib/auth";
 import { getCandidateProfile, getCandidateProfileViewStats } from "@/features/candidates/queries";
 import { getCandidateApplicationStats } from "@/features/applications/queries";
 import { recommendJobOffers } from "@/features/jobs/recommendations";
+import { getActiveSubscription } from "@/features/payments/queries";
 import { HeroCard } from "@/components/shared/HeroCard";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
 
 export default async function CandidateHomePage() {
   const user = await requireRole("candidate");
-  const [data, viewStats, appStats, recentJobs] = await Promise.all([
+  const [data, viewStats, appStats, recentJobs, subscription] = await Promise.all([
     getCandidateProfile(user.id),
     getCandidateProfileViewStats(user.id),
     getCandidateApplicationStats(user.id),
     recommendJobOffers(user.id, { limit: 4 }),
+    getActiveSubscription(user.id),
   ]);
   const firstName = data?.profile.firstName ?? "";
+  const isPremium = subscription?.plan === "candidate_premium";
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -29,21 +32,43 @@ export default async function CandidateHomePage() {
         </p>
       </header>
 
-      <HeroCard
-        title="Débloquez les contacts directs"
-        subtitle="Accédez aux numéros WhatsApp des recruteurs et boostez votre visibilité de 3x."
-        badge={<PremiumBadge label="OFFRE PRIVILÈGE" />}
-      >
-        <Button
-          asChild
-          className="bg-jc-primary-green hover:bg-jc-primary-green/90 text-white font-semibold rounded-xl px-4 h-10"
+      {isPremium && subscription ? (
+        <HeroCard
+          title="Votre boost Premium est actif"
+          subtitle={`Candidatures illimitées, contacts directs et apparition prioritaire. Actif jusqu'au ${new Date(
+            subscription.expiresAt,
+          ).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}.`}
+          badge={<PremiumBadge label="PREMIUM ACTIF" variant="green" />}
         >
-          <Link href="/c/upgrade">
-            <Sparkles className="w-4 h-4 mr-1.5" />
-            Passer en Premium
-          </Link>
-        </Button>
-      </HeroCard>
+          <Button
+            asChild
+            variant="outline"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-semibold rounded-xl px-4 h-10"
+          >
+            <Link href="/c/upgrade">Gérer mon abonnement</Link>
+          </Button>
+        </HeroCard>
+      ) : (
+        <HeroCard
+          title="Débloquez les contacts directs"
+          subtitle="Accédez aux numéros WhatsApp des recruteurs et boostez votre visibilité de 3x."
+          badge={<PremiumBadge label="OFFRE PRIVILÈGE" />}
+        >
+          <Button
+            asChild
+            className="bg-jc-primary-green hover:bg-jc-primary-green/90 text-white font-semibold rounded-xl px-4 h-10"
+          >
+            <Link href="/c/upgrade">
+              <Sparkles className="w-4 h-4 mr-1.5" />
+              Passer en Premium
+            </Link>
+          </Button>
+        </HeroCard>
+      )}
 
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         <article className="jc-card p-4">

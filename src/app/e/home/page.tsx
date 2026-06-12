@@ -4,36 +4,82 @@ import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
 import { getEmployerProfile, getEmployerStats } from "@/features/employers/queries";
 import { getJobOffersByEmployer } from "@/features/jobs/queries";
+import { getActiveSubscription } from "@/features/payments/queries";
+import { PLAN_LIMITS } from "@/lib/quotas";
 import { HeroCard } from "@/components/shared/HeroCard";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
 
 export default async function EmployerHomePage() {
   const user = await requireRole("employer");
-  const [data, stats, recentJobs] = await Promise.all([
+  const [data, stats, recentJobs, subscription] = await Promise.all([
     getEmployerProfile(user.id),
     getEmployerStats(user.id),
     getJobOffersByEmployer(user.id, 3),
+    getActiveSubscription(user.id),
   ]);
   const companyName = data?.profile.companyName ?? "";
+  const isPro = subscription?.plan === "employer_pro";
+  const activeJobsLimit = isPro
+    ? PLAN_LIMITS.employer_pro.activeJobs
+    : PLAN_LIMITS.employer_free.activeJobs;
 
   return (
     <div className="space-y-4 md:space-y-6">
-      <HeroCard
-        title={`Bonjour, ${companyName || "à vous"} !`}
-        subtitle="Découvrer des talents qualifiés pour faire avancer votre entreprise."
-        badge={<PremiumBadge label="COMPTE PREMIUM" variant="green" />}
-      >
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          <div className="rounded-xl bg-white/10 px-3 py-2">
-            <p className="text-2xl font-bold leading-none">∞</p>
-            <p className="text-[11px] text-white/70 mt-1">Candidatures illimitées</p>
+      {isPro && subscription ? (
+        <HeroCard
+          title={`Bonjour, ${companyName || "à vous"} !`}
+          subtitle={`Compte Pro actif jusqu'au ${new Date(
+            subscription.expiresAt,
+          ).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}. Profils et contacts WhatsApp illimités.`}
+          badge={<PremiumBadge label="COMPTE PRO" variant="green" />}
+        >
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            <div className="rounded-xl bg-white/10 px-3 py-2">
+              <p className="text-2xl font-bold leading-none">
+                {stats.activeJobs}
+                <span className="text-sm text-white/60">/{activeJobsLimit}</span>
+              </p>
+              <p className="text-[11px] text-white/70 mt-1">Offres actives</p>
+            </div>
+            <div className="rounded-xl bg-white/10 px-3 py-2">
+              <p className="text-2xl font-bold leading-none">{stats.profileViewsToday}</p>
+              <p className="text-[11px] text-white/70 mt-1">Vues profil (24h)</p>
+            </div>
           </div>
-          <div className="rounded-xl bg-white/10 px-3 py-2">
-            <p className="text-2xl font-bold leading-none">{stats.profileViewsToday}</p>
-            <p className="text-[11px] text-white/70 mt-1">Vues profil (24h)</p>
+        </HeroCard>
+      ) : (
+        <HeroCard
+          title={`Bonjour, ${companyName || "à vous"} !`}
+          subtitle="Recrutez sans limite avec le compte Pro : 5 offres actives, profils et contacts WhatsApp illimités."
+        >
+          <div className="grid grid-cols-2 gap-3 mt-2 mb-3">
+            <div className="rounded-xl bg-white/10 px-3 py-2">
+              <p className="text-2xl font-bold leading-none">
+                {stats.activeJobs}
+                <span className="text-sm text-white/60">/{activeJobsLimit}</span>
+              </p>
+              <p className="text-[11px] text-white/70 mt-1">Offres actives</p>
+            </div>
+            <div className="rounded-xl bg-white/10 px-3 py-2">
+              <p className="text-2xl font-bold leading-none">{stats.profileViewsToday}</p>
+              <p className="text-[11px] text-white/70 mt-1">Vues profil (24h)</p>
+            </div>
           </div>
-        </div>
-      </HeroCard>
+          <Button
+            asChild
+            className="bg-jc-primary-green hover:bg-jc-primary-green/90 text-white font-semibold rounded-xl px-4 h-10"
+          >
+            <Link href="/e/upgrade">
+              <Sparkles className="w-4 h-4 mr-1.5" />
+              Passer en Pro
+            </Link>
+          </Button>
+        </HeroCard>
+      )}
 
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         <Link
