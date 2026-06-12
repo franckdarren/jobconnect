@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Loader2, AlertCircle, Smartphone } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -33,9 +34,17 @@ type PaymentModalProps = {
   plan: PaidPlan;
 };
 
-const OPERATORS: { value: Operator; label: string; color: string }[] = [
-  { value: "airtel_money", label: "Airtel Money", color: "bg-[#E60000]" },
-  { value: "moov_money", label: "Moov Money", color: "bg-[#003DA5]" },
+const OPERATORS: { value: Operator; label: string; image: string }[] = [
+  {
+    value: "airtel_money",
+    label: "Airtel Money",
+    image: "/images/airtelmoney.webp",
+  },
+  {
+    value: "moov_money",
+    label: "Moov Money",
+    image: "/images/moovmoney.png",
+  },
 ];
 
 type Phase = "form" | "pending" | "success" | "failed";
@@ -175,13 +184,14 @@ export function PaymentModal({ open, onOpenChange, plan }: PaymentModalProps) {
                           : "border-black/5 bg-white text-jc-text-secondary",
                       )}
                     >
-                      <div
-                        className={cn(
-                          "w-8 h-8 rounded-full mx-auto mb-1.5 flex items-center justify-center text-white",
-                          op.color,
-                        )}
-                      >
-                        <Smartphone className="w-4 h-4" />
+                      <div className="w-10 h-10 mx-auto mb-1.5 relative">
+                        <Image
+                          src={op.image}
+                          alt={op.label}
+                          fill
+                          sizes="40px"
+                          className="object-contain"
+                        />
                       </div>
                       {op.label}
                     </button>
