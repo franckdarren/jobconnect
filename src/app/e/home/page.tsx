@@ -18,7 +18,7 @@ export default async function EmployerHomePage() {
         subtitle="Découvrer des talents qualifiés pour faire avancer votre entreprise."
         badge={<PremiumBadge label="COMPTE PREMIUM" variant="green" />}
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+        <div className="grid grid-cols-2 gap-3 mt-2">
           <div className="rounded-xl bg-white/10 px-3 py-2">
             <p className="text-2xl font-bold leading-none">∞</p>
             <p className="text-[11px] text-white/70 mt-1">Candidatures illimitées</p>
@@ -30,7 +30,7 @@ export default async function EmployerHomePage() {
         </div>
       </HeroCard>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Eye className="w-4 h-4" />

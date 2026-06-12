@@ -38,7 +38,7 @@ export default async function CandidateHomePage() {
         </Button>
       </HeroCard>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         <article className="jc-card p-4">
           <div className="flex items-center gap-2 text-sm text-jc-primary-green font-medium">
             <Eye className="w-4 h-4" />

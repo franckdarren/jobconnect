@@ -376,7 +376,7 @@ export async function deleteEducation(
 export async function getOrCreateSkill(
   name: string,
 ): Promise<ActionResult<{ id: string; name: string }>> {
-  await requireRole("candidate");
+  await requireAuth();
   const parsed = getOrCreateSkillSchema.safeParse({ name });
   if (!parsed.success) {
     return { success: false, error: formatZodError(parsed.error) };

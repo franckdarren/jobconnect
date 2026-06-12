@@ -47,24 +47,35 @@ export function JobsFilters({
 
   return (
     <div className="space-y-3">
-      <div className="jc-card p-3 flex gap-2 items-center">
+      <div className="jc-card p-3 space-y-2">
+        <div className="flex gap-2 items-center">
+          <IconInput
+            icon={<Search className="w-4 h-4" />}
+            placeholder="Poste, entreprise ou mot-clé..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") apply({});
+            }}
+            className="h-10"
+          />
+          <Button
+            type="button"
+            onClick={() => apply({})}
+            className="shrink-0 rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white h-12 px-4"
+          >
+            Chercher
+          </Button>
+        </div>
         <IconInput
-          icon={<Search className="w-4 h-4" />}
-          placeholder="Poste, entreprise ou mot-clé..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
+          placeholder="Filtrer par ville..."
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") apply({});
           }}
           className="h-10"
         />
-        <Button
-          type="button"
-          onClick={() => apply({})}
-          className="rounded-xl bg-jc-primary-dark hover:bg-jc-primary-dark/90 text-white h-12 px-4"
-        >
-          Chercher
-        </Button>
       </div>
 
       <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-1 scrollbar-thin">
@@ -87,7 +98,7 @@ export function JobsFilters({
                 "shrink-0 inline-flex items-center gap-1.5 rounded-full px-4 h-9 text-sm font-semibold transition-colors disabled:opacity-70",
                 active
                   ? "bg-jc-primary-dark text-white"
-                  : "bg-jc-background border border-black/[0.06] text-jc-text-secondary",
+                  : "bg-jc-background border border-black/6 text-jc-text-secondary",
               )}
             >
               {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : null}

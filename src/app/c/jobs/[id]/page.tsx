@@ -219,7 +219,7 @@ export default async function JobDetailPage({
       </div>
 
       {/* Postuler — bouton ancré en bas (mobile only) */}
-      <div className="md:hidden fixed bottom-20 inset-x-0 z-30 max-w-md mx-auto px-4">
+      <div className="md:hidden fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0))] inset-x-0 z-30 max-w-md mx-auto px-4">
         {applyAction}
       </div>
     </div>

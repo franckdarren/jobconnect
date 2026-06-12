@@ -310,7 +310,7 @@ export function ProfileEditor({
         </Button>
       </form>
 
-      <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0">
+      <div className="md:grid md:grid-cols-2 md:gap-4 space-y-4 md:space-y-0 md:max-w-3xl">
       {/* ===== Section : Compétences ===== */}
       <section className="jc-card p-5">
         <div className="flex items-center justify-between mb-3">
