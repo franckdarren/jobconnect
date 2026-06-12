@@ -95,7 +95,7 @@ export function JobCard({
               "bg-jc-primary-green hover:bg-jc-primary-green/90 text-white border-transparent",
           )}
         >
-          <Link href={`/jobs/${job.id}`}>Voir détails</Link>
+          <Link href={`/c/jobs/${job.id}`}>Voir détails</Link>
         </Button>
       </div>
     </article>
