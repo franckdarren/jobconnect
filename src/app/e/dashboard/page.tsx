@@ -185,7 +185,7 @@ export default async function EmployerDashboardPage() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold leading-tight text-sm">
+                        <h3 className="font-bold leading-tight text-sm truncate">
                           {fullName}
                         </h3>
                         {a.profession ? (

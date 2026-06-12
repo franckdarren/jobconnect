@@ -54,10 +54,10 @@ export function JobCard({
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-jc-text-primary leading-tight">
+          <h3 className="font-bold text-jc-text-primary leading-tight truncate">
             {job.title}
           </h3>
-          <p className="text-sm text-jc-text-secondary mt-0.5">
+          <p className="text-sm text-jc-text-secondary mt-0.5 truncate">
             {job.company}
             {job.city ? ` • ${job.city}` : null}
           </p>

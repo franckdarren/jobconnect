@@ -165,7 +165,7 @@ Source unique : `isPremiumCandidateExpr(...)` dans [`src/features/candidates/que
 2. `isPremium DESC` — abonnement actif.
 3. `createdAt DESC` — récence.
 
-Le boost admin garde la priorité absolue (cas d'usage : promo ciblée), le premium passe devant les comptes free. Le badge **✦ PREMIUM** apparaît à côté du nom dans `CandidateCard` et dans le header de `/e/search/[id]` (seulement si profil déverrouillé — sinon ça leak l'info à un employeur qui n'a pas dépensé son quota).
+Le boost admin garde la priorité absolue (cas d'usage : promo ciblée), le premium passe devant les comptes free. Le statut premium d'un candidat n'est **pas exposé visuellement aux employeurs** (ni dans `CandidateCard`, ni dans `/e/search/[id]`) — il agit uniquement comme signal de tri SQL.
 
 ⚠️ **Ne pas confondre** :
 - `candidate_profiles.isBoosted` = booléen admin, manuel.

@@ -136,7 +136,7 @@ export default async function CandidateHomePage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-sm text-jc-text-primary leading-tight line-clamp-2">
+                        <h3 className="font-bold text-sm text-jc-text-primary leading-tight truncate">
                           {job.title}
                         </h3>
                         <p className="text-xs text-jc-text-secondary mt-1 truncate">

@@ -119,7 +119,6 @@ export default async function EmployerSearchPage({
               photoUrl: r.photoUrl,
               whatsappPhone: null,
               isBoosted: r.isBoosted,
-              isPremium: r.isPremium,
             };
             return (
               <li key={r.id}>

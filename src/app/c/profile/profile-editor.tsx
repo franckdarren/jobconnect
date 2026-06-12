@@ -365,8 +365,10 @@ export function ProfileEditor({
                 className="jc-card p-4 flex items-start justify-between gap-3"
               >
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold">{exp.title}</h3>
-                  <p className="text-sm text-jc-text-secondary">{exp.company}</p>
+                  <h3 className="font-bold truncate">{exp.title}</h3>
+                  <p className="text-sm text-jc-text-secondary truncate">
+                    {exp.company}
+                  </p>
                   <p className="text-[11px] uppercase tracking-wide text-jc-text-muted mt-1">
                     {formatMonthYear(exp.startDate)} —{" "}
                     {exp.current ? "Présent" : formatMonthYear(exp.endDate)}
@@ -466,8 +468,10 @@ export function ProfileEditor({
                 className="jc-card p-4 flex items-start justify-between gap-3"
               >
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold">{edu.degree}</h3>
-                  <p className="text-sm text-jc-text-secondary">{edu.school}</p>
+                  <h3 className="font-bold truncate">{edu.degree}</h3>
+                  <p className="text-sm text-jc-text-secondary truncate">
+                    {edu.school}
+                  </p>
                   <p className="text-[11px] uppercase tracking-wide text-jc-text-muted mt-1">
                     {edu.startYear ?? "—"} - {edu.endYear ?? "Présent"}
                   </p>

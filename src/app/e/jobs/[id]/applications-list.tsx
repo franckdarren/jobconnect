@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MapPin, Clock, Eye, X, MessageCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -93,7 +94,10 @@ export function ApplicationsList({
         const phone = a.whatsappPhone || a.candidatePhone;
         return (
           <li key={a.id} className="jc-card p-4">
-            <div className="flex items-start gap-3">
+            <Link
+              href={`/e/search/${a.candidateId}`}
+              className="flex items-start gap-3 -m-1 p-1 rounded-lg hover:bg-black/2 transition-colors"
+            >
               <Avatar className="w-12 h-12 ring-2 ring-jc-primary-green/20 shrink-0">
                 <AvatarImage src={a.photoUrl ?? undefined} alt={fullName} />
                 <AvatarFallback>
@@ -102,7 +106,9 @@ export function ApplicationsList({
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold leading-tight">{fullName}</h3>
+                <h3 className="font-bold leading-tight truncate hover:text-jc-primary-green">
+                  {fullName}
+                </h3>
                 {a.profession ? (
                   <p className="text-xs text-jc-text-secondary mt-0.5">
                     {a.profession}
@@ -126,7 +132,7 @@ export function ApplicationsList({
               >
                 {STATUS_LABEL[a.status]}
               </span>
-            </div>
+            </Link>
 
             <div className="mt-3 pt-3 border-t border-black/[0.04] grid grid-cols-3 gap-1.5">
               {a.status === "pending" ? (

@@ -180,7 +180,7 @@ export function NotificationsList({ initial }: { initial: Notif[] }) {
                   <div className="flex items-center justify-between gap-2">
                     <p
                       className={cn(
-                        "text-sm leading-tight",
+                        "text-sm leading-tight truncate min-w-0",
                         n.isRead
                           ? "font-medium text-jc-text-secondary"
                           : "font-bold text-jc-text-primary",

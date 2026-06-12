@@ -76,8 +76,10 @@ export default async function EmployerJobsPage() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-bold leading-tight">{o.title}</h2>
-                    <p className="text-xs text-jc-text-secondary mt-1">
+                    <h2 className="font-bold leading-tight truncate">
+                      {o.title}
+                    </h2>
+                    <p className="text-xs text-jc-text-secondary mt-1 truncate">
                       {TYPE_LABEL[o.type]}
                       {o.city ? ` • ${o.city}` : null}
                       {o.salaryLabel ? ` • ${o.salaryLabel}` : null}

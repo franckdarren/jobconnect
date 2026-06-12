@@ -178,10 +178,10 @@ export default async function CandidateDashboardPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold leading-tight">
+                        <h3 className="font-bold leading-tight truncate">
                           {a.jobTitle}
                         </h3>
-                        <p className="text-xs text-jc-text-secondary mt-0.5">
+                        <p className="text-xs text-jc-text-secondary mt-0.5 truncate">
                           {a.companyName ?? "Entreprise"}
                           {a.jobCity ? ` • ${a.jobCity}` : null}
                         </p>
