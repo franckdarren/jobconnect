@@ -1,4 +1,4 @@
-# ROADMAP — JobConnect
+# ROADMAP — 241Job
 
 > Plan d'implémentation détaillé du MVP.
 > Chaque phase liste : objectif, préalables, tâches concrètes, fichiers à produire, critères d'acceptation.
@@ -595,7 +595,7 @@ Fichier : `src/app/manifest.json` (cf. CLAUDE.md §13).
 ### 13.6 Déploiement
 - Vercel projet lié au repo.
 - Variables d'env prod (Supabase prod, PVIT prod).
-- Domaine custom (jobconnect.ga ou équivalent).
+- Domaine custom (241job.ga ou équivalent).
 - Configurer les crons Vercel.
 - DNS + SSL.
 - Premier déploiement → tests smoke sur prod.

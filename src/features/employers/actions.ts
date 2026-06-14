@@ -279,7 +279,7 @@ export async function viewCandidateProfile(
     userId: candidate.userId,
     type: "profile_viewed",
     title: "Votre profil a été consulté",
-    message: `${employer?.companyName ?? "Une entreprise"} a consulté votre profil sur JobConnect.`,
+    message: `${employer?.companyName ?? "Une entreprise"} a consulté votre profil sur 241Job.`,
     metadata: {
       employerId: user.id,
       employerName: employer?.companyName ?? null,

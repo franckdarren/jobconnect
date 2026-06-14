@@ -6,7 +6,7 @@ import { LoginForm } from "./login-form";
 export default function LoginPage() {
   return (
     <AuthCard
-      title="Bienvenue sur JobConnect"
+      title="Bienvenue sur 241Job"
       subtitle="Connectez-vous avec votre numéro WhatsApp."
       footer={
         <>

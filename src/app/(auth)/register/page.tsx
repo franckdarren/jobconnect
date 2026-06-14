@@ -8,7 +8,7 @@ export default function RegisterChoicePage() {
         <Briefcase className="w-8 h-8 text-jc-primary-dark" />
       </div>
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold">JobConnect</h1>
+        <h1 className="text-2xl font-bold">241Job</h1>
         <h2 className="text-xl font-bold mt-3">Vous êtes ?</h2>
         <p className="text-sm text-jc-text-secondary mt-2">
           Choisissez votre profil pour commencer.

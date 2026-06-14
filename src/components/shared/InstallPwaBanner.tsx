@@ -86,7 +86,7 @@ export function InstallPwaBanner() {
         <Download className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-sm">Installer JobConnect</p>
+        <p className="font-bold text-sm">Installer 241Job</p>
         {deferred ? (
           <p className="text-xs text-white/70 mt-0.5">
             Accédez à vos offres en un tap, même hors ligne.
@@ -101,7 +101,7 @@ export function InstallPwaBanner() {
             type="button"
             onClick={onInstall}
             disabled={isInstalling}
-            aria-label="Installer l'application JobConnect"
+            aria-label="Installer l'application 241Job"
             className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-jc-primary-green hover:bg-jc-primary-green/90 disabled:opacity-60 text-white text-xs font-semibold px-4 py-1.5"
           >
             {isInstalling ? (

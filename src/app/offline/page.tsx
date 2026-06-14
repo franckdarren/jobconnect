@@ -12,7 +12,7 @@ export default function OfflinePage() {
         </div>
         <h1 className="text-2xl font-bold">Vous êtes hors ligne</h1>
         <p className="text-sm text-white/70">
-          JobConnect a besoin d&apos;une connexion pour afficher cette page.
+          241Job a besoin d&apos;une connexion pour afficher cette page.
           Vérifiez votre réseau et réessayez.
         </p>
         <Link

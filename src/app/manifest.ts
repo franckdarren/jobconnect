@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "JobConnect",
-    short_name: "JobConnect",
+    name: "241Job",
+    short_name: "241Job",
     description: "L'emploi direct au Gabon",
     start_url: "/",
     display: "standalone",

@@ -87,7 +87,7 @@ export function NavMenu({
           <SheetHeader className="px-5 pt-5 pb-4 border-b border-black/5">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-lg font-bold text-jc-text-primary">
-                JobConnect
+                241Job
               </SheetTitle>
               <button
                 type="button"

@@ -86,7 +86,7 @@ export function SideNav({
           href={homeHref}
           className="font-bold text-xl text-jc-text-primary tracking-tight"
         >
-          JobConnect
+          241Job
         </Link>
         <p className="text-[11px] text-jc-text-muted mt-0.5">
           {role === "candidate" ? "Espace candidat" : "Espace employeur"}

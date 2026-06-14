@@ -23,7 +23,7 @@ export function AuthCard({
           <Briefcase className="w-8 h-8 text-jc-primary-dark" />
         </div>
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-jc-text-primary">JobConnect</h1>
+          <h1 className="text-2xl font-bold text-jc-text-primary">241Job</h1>
           <h2 className="text-xl font-bold text-jc-text-primary mt-3 leading-tight">
             {title}
           </h2>

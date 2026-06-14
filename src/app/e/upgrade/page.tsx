@@ -40,7 +40,7 @@ export default async function EmployerUpgradePage() {
       <header className="text-center space-y-1">
         <h1 className="text-2xl md:text-4xl font-bold">Recrutez sans limite</h1>
         <p className="text-sm md:text-base text-jc-text-secondary">
-          Passez à JobConnect Pro pour booster vos recrutements.
+          Passez à 241Job Pro pour booster vos recrutements.
         </p>
       </header>
 

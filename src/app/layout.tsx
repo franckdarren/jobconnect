@@ -24,14 +24,14 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "JobConnect — L'emploi direct au Gabon",
+  title: "241Job — L'emploi direct au Gabon",
   description:
     "Trouvez un job en 48h au Gabon. Plateforme de recrutement WhatsApp-first.",
-  applicationName: "JobConnect",
+  applicationName: "241Job",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "JobConnect",
+    title: "241Job",
   },
 };
 

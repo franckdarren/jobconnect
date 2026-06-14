@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ===========================================================================
- * JobConnect — Design tokens (CLAUDE.md §12)
+ * 241Job — Design tokens (CLAUDE.md §12)
  * ========================================================================= */
 :root {
   /* Brand palette */
@@ -24,7 +24,7 @@
   --jc-orange: #d97706;
   --jc-whatsapp: #25d366;
 
-  /* shadcn token bridge — map shadcn defaults to JobConnect palette */
+  /* shadcn token bridge — map shadcn defaults to 241Job palette */
   --background: #f0f4f8;
   --foreground: #0d1b2a;
   --card: #ffffff;
@@ -93,7 +93,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* JobConnect named tokens */
+  /* 241Job named tokens */
   --color-jc-primary-dark: var(--jc-primary-dark);
   --color-jc-primary-green: var(--jc-primary-green);
   --color-jc-accent-green: var(--jc-accent-green);
@@ -141,7 +141,7 @@
 }
 
 /* ===========================================================================
- * Utility classes for JobConnect signature patterns
+ * Utility classes for 241Job signature patterns
  * Tailwind v4 — use @utility so classes are composable with @apply.
  * ========================================================================= */
 @utility jc-card {

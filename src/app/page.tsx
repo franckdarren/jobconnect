@@ -42,7 +42,7 @@ export default async function SplashPage() {
         </div>
 
         <div className="flex flex-col items-center gap-1">
-          <span className="text-2xl font-bold tracking-wide">JobConnect</span>
+          <span className="text-2xl font-bold tracking-wide">241Job</span>
           <span className="w-12 h-0.5 bg-[#2E8B57] rounded-full" />
         </div>
       </div>

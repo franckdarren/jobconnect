@@ -1,4 +1,4 @@
-# CLAUDE.md — JobConnect
+# CLAUDE.md — 241Job
 
 Contexte principal pour Claude Code. À lire avant toute action.
 
@@ -6,7 +6,7 @@ Contexte principal pour Claude Code. À lire avant toute action.
 
 ## 0. En une phrase
 
-**JobConnect** = PWA mobile-first de recrutement pour le Gabon, interactions via WhatsApp uniquement, principe UX « action importante en moins de 3 clics ». Cible : utilisateurs peu familiers avec les outils numériques complexes.
+**241Job** = PWA mobile-first de recrutement pour le Gabon, interactions via WhatsApp uniquement, principe UX « action importante en moins de 3 clics ». Cible : utilisateurs peu familiers avec les outils numériques complexes.
 
 ---
 
@@ -94,7 +94,7 @@ Plutôt qu'un arbre exhaustif, voici **où mettre quoi** :
 | `src/services/payment/` | Interface `PaymentProvider`, impl `pvit.service.ts`, `mock.service.ts`. |
 | `src/repositories/` | Accès DB par entité (user, candidate, employer, job, application, subscription, notification). |
 | `src/components/ui/` | shadcn/ui (générés). |
-| `src/components/shared/` | Composants custom JobConnect (BottomNav, HeroCard, JobCard, CandidateCard, WhatsAppButton, PremiumBadge, LockOverlay, modals…). |
+| `src/components/shared/` | Composants custom 241Job (BottomNav, HeroCard, JobCard, CandidateCard, WhatsAppButton, PremiumBadge, LockOverlay, modals…). |
 | `src/hooks/` | `useUser`, `useQuotas`, `useSubscription`. |
 | `src/types/` | Types globaux, types inférés Drizzle. |
 
@@ -217,10 +217,10 @@ export function buildWhatsAppUrl(phone: string, message: string): string {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
 }
 export function candidateContactMessage(jobTitle: string): string {
-  return `Bonjour, je vous contacte concernant votre candidature sur JobConnect pour le poste de ${jobTitle}.`
+  return `Bonjour, je vous contacte concernant votre candidature sur 241Job pour le poste de ${jobTitle}.`
 }
 export function employerContactMessage(candidateName: string): string {
-  return `Bonjour ${candidateName}, j'ai consulté votre profil sur JobConnect et je souhaite vous contacter.`
+  return `Bonjour ${candidateName}, j'ai consulté votre profil sur 241Job et je souhaite vous contacter.`
 }
 ```
 
@@ -296,8 +296,8 @@ type ActionResult<T> =
 Manifest (`src/app/manifest.json`) :
 ```json
 {
-  "name": "JobConnect",
-  "short_name": "JobConnect",
+  "name": "241Job",
+  "short_name": "241Job",
   "description": "L'emploi direct au Gabon",
   "start_url": "/",
   "display": "standalone",
@@ -327,7 +327,7 @@ PVIT_CALLBACK_URL_CODE=
 
 # App
 NEXT_PUBLIC_APP_URL=
-NEXT_PUBLIC_APP_NAME=JobConnect
+NEXT_PUBLIC_APP_NAME=241Job
 
 # Admin seed (server only)
 ADMIN_PHONE=

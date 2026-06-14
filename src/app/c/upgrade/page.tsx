@@ -40,7 +40,7 @@ export default async function CandidateUpgradePage() {
       <header className="text-center space-y-1">
         <h1 className="text-2xl md:text-4xl font-bold">Boostez votre carrière</h1>
         <p className="text-sm md:text-base text-jc-text-secondary">
-          Décrochez plus d&apos;opportunités avec JobConnect Premium.
+          Décrochez plus d&apos;opportunités avec 241Job Premium.
         </p>
       </header>
 

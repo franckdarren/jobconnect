@@ -25,7 +25,7 @@ export function AppHeader({
           href={`${prefix}/home`}
           className="font-bold text-lg text-jc-text-primary tracking-tight"
         >
-          JobConnect
+          241Job
         </Link>
         <div className="flex items-center gap-1 -mr-1">
           <NotificationBell role={role} />

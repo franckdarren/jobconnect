@@ -52,7 +52,7 @@ export default async function AdminLayout({
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-black/4 p-4">
         <Link href="/admin/dashboard" className="font-bold text-lg mb-6">
-          JobConnect <span className="text-jc-text-muted">/ admin</span>
+          241Job <span className="text-jc-text-muted">/ admin</span>
         </Link>
         <NavLinks />
       </aside>
@@ -70,7 +70,7 @@ export default async function AdminLayout({
             <SheetContent side="left" className="w-64 p-4">
               <SheetHeader className="px-0 pt-0">
                 <SheetTitle className="text-left text-lg font-bold">
-                  JobConnect{" "}
+                  241Job{" "}
                   <span className="text-jc-text-muted font-normal">/ admin</span>
                 </SheetTitle>
               </SheetHeader>
@@ -80,7 +80,7 @@ export default async function AdminLayout({
             </SheetContent>
           </Sheet>
           <Link href="/admin/dashboard" className="font-bold text-base">
-            JobConnect <span className="text-jc-text-muted">/ admin</span>
+            241Job <span className="text-jc-text-muted">/ admin</span>
           </Link>
           <span className="w-7" />
         </div>

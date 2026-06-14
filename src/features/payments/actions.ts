@@ -73,7 +73,7 @@ export async function initiatePayment(
     operator,
     phone,
     plan,
-    description: `JobConnect — ${PLAN_LABELS[plan]}`,
+    description: `241Job — ${PLAN_LABELS[plan]}`,
   });
 
   if (init.status === "REJECTED") {
