@@ -1,7 +1,7 @@
 import { Search, Users } from "lucide-react";
 import { listAdminUsers } from "@/features/admin/queries";
 import { UserActions } from "./user-actions";
-import { FilterPill, PagerLink } from "../filter-link";
+import { FilterTabs, PagerLink } from "../filter-link";
 
 const ROLE_LABEL = {
   candidate: "Candidat",
@@ -90,23 +90,14 @@ export default async function AdminUsersPage({
         </button>
       </form>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {ROLE_TABS.map((t) => {
-          const active = (validRole ?? "all") === t.value;
-          return (
-            <FilterPill
-              key={t.value}
-              active={active}
-              href={buildPageUrl("/admin/users", sp, {
-                role: t.value,
-                page: 1,
-              })}
-            >
-              {t.label}
-            </FilterPill>
-          );
-        })}
-      </div>
+      <FilterTabs
+        active={validRole ?? "all"}
+        tabs={ROLE_TABS.map((t) => ({
+          value: t.value,
+          label: t.label,
+          href: buildPageUrl("/admin/users", sp, { role: t.value, page: 1 }),
+        }))}
+      />
 
       {rows.length === 0 ? (
         <div className="jc-card p-8 text-center text-sm text-jc-text-secondary">

@@ -1,6 +1,6 @@
 import { Receipt } from "lucide-react";
 import { listAdminPayments } from "@/features/admin/queries";
-import { FilterPill, PagerLink } from "../filter-link";
+import { FilterTabs, PagerLink } from "../filter-link";
 
 const PLAN_LABEL = {
   candidate_free: "Candidat Gratuit",
@@ -98,20 +98,14 @@ export default async function AdminPaymentsPage({
         </p>
       </header>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {STATUS_TABS.map((t) => {
-          const active = (validStatus ?? "all") === t.value;
-          return (
-            <FilterPill
-              key={t.value}
-              active={active}
-              href={buildPageUrl(sp, { status: t.value, page: 1 })}
-            >
-              {t.label}
-            </FilterPill>
-          );
-        })}
-      </div>
+      <FilterTabs
+        active={validStatus ?? "all"}
+        tabs={STATUS_TABS.map((t) => ({
+          value: t.value,
+          label: t.label,
+          href: buildPageUrl(sp, { status: t.value, page: 1 }),
+        }))}
+      />
 
       {rows.length === 0 ? (
         <div className="jc-card p-8 text-center text-sm text-jc-text-secondary">
