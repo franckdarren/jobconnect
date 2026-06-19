@@ -162,6 +162,54 @@
   border: none;
 }
 
+/* ===========================================================================
+ * Admin dark mode — scoped to `.admin-shell`.
+ * next-themes pose `.dark` sur <html> (storageKey "admin-theme"). On limite tout
+ * le restyling au sous-arbre admin : les espaces candidat / employeur restent
+ * en clair même si la classe `.dark` persiste après navigation.
+ * `.admin-shell` est aussi posée sur le SheetContent mobile (porté hors arbre).
+ * ========================================================================= */
+.dark .admin-shell {
+  /* Tokens 241Job (dark) */
+  --jc-background: #0b1220;
+  --jc-card: #111a29;
+  --jc-light-green: #14301f;
+  --jc-primary-green: #34d27b;
+  --jc-text-primary: #e6eaf2;
+  --jc-text-secondary: #9aa6b8;
+  --jc-text-muted: #6f7b8e;
+
+  /* Bridge shadcn (dark) — pour les composants portés marqués `.admin-shell` */
+  --background: #0b1220;
+  --foreground: #e6eaf2;
+  --card: #111a29;
+  --card-foreground: #e6eaf2;
+  --popover: #111a29;
+  --popover-foreground: #e6eaf2;
+  --muted: #1a2536;
+  --muted-foreground: #9aa6b8;
+  --border: rgb(255 255 255 / 0.08);
+  --input: #1a2536;
+
+  color: var(--jc-text-primary);
+  background-color: var(--jc-background);
+}
+
+/* Repeindre les littéraux clairs codés en dur dans les pages admin */
+.dark .admin-shell .jc-card {
+  background-color: var(--jc-card);
+  border-color: rgb(255 255 255 / 0.06);
+  box-shadow: none;
+}
+.dark .admin-shell .bg-white {
+  background-color: var(--jc-card) !important;
+}
+.dark .admin-shell .border-black\/4,
+.dark .admin-shell .border-black\/5,
+.dark .admin-shell .border-black\/\[0\.06\] {
+  border-color: rgb(255 255 255 / 0.08) !important;
+}
+
 /* ---------------------------------------------------------------------------
  * Kill browser autofill background.
  * - Chrome/Edge/Safari/Opera use -webkit-autofill.

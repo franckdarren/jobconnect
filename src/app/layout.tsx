@@ -47,7 +47,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={cn("h-full", inter.variable)}>
+    <html
+      lang="fr"
+      className={cn("h-full", inter.variable)}
+      suppressHydrationWarning
+    >
       <body className="min-h-full bg-jc-background text-jc-text-primary antialiased font-sans">
         <AppDataProvider>
           {children}
