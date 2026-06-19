@@ -47,11 +47,13 @@ async function seedAdmin() {
   }
 
   const supabase = createAdminClient();
+  // Le téléphone n'est pas transmis au champ `phone` de Supabase Auth (qui
+  // exige le format E.164) : comme à l'inscription, il est conservé en format
+  // local uniquement dans la table `users` pour le lookup au login.
   const { data: created, error } = await supabase.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
-    phone,
   });
 
   if (error || !created.user) {

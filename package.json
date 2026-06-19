@@ -12,7 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx src/lib/db/seed.ts"
+    "db:seed": "node --env-file=.env --conditions=react-server --import tsx src/lib/db/seed.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
@@ -45,6 +45,7 @@
     "react-dom": "19.2.4",
     "react-hook-form": "^7.77.0",
     "resend": "^6.12.4",
+    "server-only": "^0.0.1",
     "serwist": "^9.5.11",
     "shadcn": "^4.10.0",
     "sonner": "^2.0.7",
