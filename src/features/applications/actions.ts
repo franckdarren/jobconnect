@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
 import { requireRole } from "@/lib/auth";
 import { checkCandidateApplicationQuota } from "@/lib/quotas";
@@ -96,6 +96,7 @@ export async function applyToJob(
     });
   }
 
+  revalidateTag(`job-${job.id}`, "default");
   revalidatePath("/c/dashboard");
   revalidatePath(`/e/jobs/${job.id}`);
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth";
@@ -104,6 +104,7 @@ export async function createJobOffer(
     );
   }
 
+  revalidateTag("jobs", "default");
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   revalidatePath("/e/home");
@@ -163,6 +164,8 @@ export async function updateJobOffer(
     );
   }
 
+  revalidateTag("jobs", "default");
+  revalidateTag(`job-${d.id}`, "default");
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   revalidatePath(`/e/jobs/${d.id}`);
@@ -182,6 +185,8 @@ export async function closeJobOffer(
   if (result.length === 0) {
     return { success: false, error: "Offre introuvable" };
   }
+  revalidateTag("jobs", "default");
+  revalidateTag(`job-${id}`, "default");
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   revalidatePath(`/e/jobs/${id}`);
@@ -209,6 +214,8 @@ export async function reopenJobOffer(
   if (result.length === 0) {
     return { success: false, error: "Offre introuvable" };
   }
+  revalidateTag("jobs", "default");
+  revalidateTag(`job-${id}`, "default");
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   revalidatePath(`/e/jobs/${id}`);
@@ -279,6 +286,7 @@ export async function duplicateJobOffer(
     );
   }
 
+  revalidateTag("jobs", "default");
   revalidatePath("/e/jobs");
   revalidatePath("/c/jobs");
   return { success: true, data: { id: created.id } };

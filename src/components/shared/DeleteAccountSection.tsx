@@ -67,10 +67,10 @@ export function DeleteAccountSection() {
           <Button
             type="button"
             variant="outline"
-            className="mt-4 w-full h-11 rounded-xl border-jc-warning/40 text-jc-warning hover:bg-jc-warning/5 hover:text-jc-warning font-semibold"
+            className="mt-4 w-full sm:w-auto h-11 rounded-xl border-jc-warning/40 text-jc-warning hover:bg-jc-warning/5 hover:text-jc-warning font-semibold"
           >
             <Trash2 className="w-4 h-4 mr-2" />
-            Supprimer définitivement mon compte
+            Supprimer mon compte
           </Button>
         </DialogTrigger>
         <DialogContent>

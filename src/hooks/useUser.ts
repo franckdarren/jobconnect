@@ -1,32 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
+import { useAppData } from "@/components/shared/AppDataProvider";
+import type { SubscriptionPlan } from "@/types";
+
+export type ClientUser = {
+  role: "candidate" | "employer" | "admin";
+  plan: SubscriptionPlan | null;
+} | null;
 
 export function useUser() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, loading } = useAppData();
 
-  useEffect(() => {
-    const supabase = createClient();
-    let cancelled = false;
+  if (!data || !("authenticated" in data) || !data.authenticated) {
+    return { user: null, loading };
+  }
 
-    supabase.auth.getUser().then(({ data }) => {
-      if (cancelled) return;
-      setUser(data.user ?? null);
-      setLoading(false);
-    });
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      cancelled = true;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+  const user: ClientUser = {
+    role: data.role as "candidate" | "employer" | "admin",
+    plan: "plan" in data ? data.plan : null,
+  };
 
   return { user, loading };
 }

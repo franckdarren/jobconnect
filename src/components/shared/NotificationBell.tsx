@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const POLL_MS = 30_000;
+const POLL_MS = 60_000;
 
 type Props = {
   role: "candidate" | "employer";
@@ -18,7 +18,10 @@ export function NotificationBell({ role, className }: Props) {
 
   useEffect(() => {
     let cancelled = false;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
     const fetchCount = async () => {
+      if (document.hidden) return;
       try {
         const res = await fetch("/api/notifications/unread-count", {
           credentials: "include",
@@ -31,11 +34,28 @@ export function NotificationBell({ role, className }: Props) {
         // silent — indicative-only counter
       }
     };
-    fetchCount();
-    const id = setInterval(fetchCount, POLL_MS);
+
+    const startPolling = () => {
+      fetchCount();
+      intervalId = setInterval(fetchCount, POLL_MS);
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null;
+      } else {
+        startPolling();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+    startPolling();
+
     return () => {
       cancelled = true;
-      clearInterval(id);
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 

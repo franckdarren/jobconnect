@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { PwaRegister } from "@/components/shared/PwaRegister";
 import { InstallPwaBanner } from "@/components/shared/InstallPwaBanner";
+import { AppDataProvider } from "@/components/shared/AppDataProvider";
 
 const inter = localFont({
   src: [
@@ -48,10 +49,12 @@ export default function RootLayout({
   return (
     <html lang="fr" className={cn("h-full", inter.variable)}>
       <body className="min-h-full bg-jc-background text-jc-text-primary antialiased font-sans">
-        {children}
-        <Toaster position="top-center" richColors />
-        <PwaRegister />
-        <InstallPwaBanner />
+        <AppDataProvider>
+          {children}
+          <Toaster position="top-center" richColors />
+          <PwaRegister />
+          <InstallPwaBanner />
+        </AppDataProvider>
       </body>
     </html>
   );

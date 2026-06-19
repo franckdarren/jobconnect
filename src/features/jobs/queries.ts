@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { and, asc, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
@@ -90,7 +91,7 @@ export async function listOwnJobOffers(employerId: string) {
     .orderBy(desc(jobOffers.createdAt));
 }
 
-export async function getJobOfferById(id: string) {
+async function _getJobOfferById(id: string) {
   const [row] = await db
     .select({
       job: jobOffers,
@@ -136,6 +137,15 @@ export async function getJobOfferById(id: string) {
     skills: skillRows,
     applicationsCount,
   };
+}
+
+// Mise en cache : même résultat pour tous les utilisateurs. Invalidé par
+// revalidateTag('jobs') à chaque mutation (create/update/close/reopen).
+export function getJobOfferById(id: string) {
+  return unstable_cache(_getJobOfferById, ["job-offer", id], {
+    tags: ["jobs", `job-${id}`],
+    revalidate: 300,
+  })(id);
 }
 
 export async function getJobOffersByEmployer(employerId: string, limit = 5) {
