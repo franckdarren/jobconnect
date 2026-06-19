@@ -54,6 +54,9 @@ async function seedAdmin() {
     email,
     password,
     email_confirm: true,
+    // Le middleware ([proxy.ts]) lit le rôle dans `user_metadata.role` (pas en
+    // base, pour la perf). Sans ça, l'admin boucle entre /admin/dashboard et /.
+    user_metadata: { role: "admin", phone },
   });
 
   if (error || !created.user) {
