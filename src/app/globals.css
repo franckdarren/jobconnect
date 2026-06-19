@@ -209,6 +209,11 @@
 .dark .admin-shell .border-black\/\[0\.06\] {
   border-color: rgb(255 255 255 / 0.08) !important;
 }
+/* Champs de formulaire (IconInput, jc-input-soft) — fond clair codé en dur */
+.dark .admin-shell .bg-\[\#f0f4f8\],
+.dark .admin-shell .jc-input-soft {
+  background-color: var(--input) !important;
+}
 
 /* ---------------------------------------------------------------------------
  * Kill browser autofill background.
@@ -236,4 +241,16 @@ select:-webkit-autofill {
   background-clip: content-box !important;
   transition: background-color 9999s ease-out 0s !important;
   caret-color: var(--jc-text-primary) !important;
+}
+
+/* Même technique, mais teinte sombre dans le scope admin en dark mode. */
+.dark .admin-shell input:autofill,
+.dark .admin-shell input:-webkit-autofill,
+.dark .admin-shell input:-webkit-autofill:hover,
+.dark .admin-shell input:-webkit-autofill:focus,
+.dark .admin-shell input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--jc-text-primary) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--input) inset !important;
+  box-shadow: 0 0 0 1000px var(--input) inset !important;
+  background-color: var(--input) !important;
 }
