@@ -9,6 +9,7 @@ import {
   Briefcase,
   CreditCard,
   Receipt,
+  Settings,
   Loader2,
   type LucideIcon,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const ITEMS: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/admin/jobs", label: "Offres", icon: Briefcase },
   { href: "/admin/subscriptions", label: "Abonnements", icon: CreditCard },
   { href: "/admin/payments", label: "Paiements", icon: Receipt },
+  { href: "/admin/settings", label: "Paramètres", icon: Settings },
 ];
 
 function LinkSpinner() {

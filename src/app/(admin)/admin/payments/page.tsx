@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Receipt } from "lucide-react";
 import { listAdminPayments } from "@/features/admin/queries";
+import { FilterPill, PagerLink } from "../filter-link";
 
 const PLAN_LABEL = {
   candidate_free: "Candidat Gratuit",
@@ -102,17 +102,13 @@ export default async function AdminPaymentsPage({
         {STATUS_TABS.map((t) => {
           const active = (validStatus ?? "all") === t.value;
           return (
-            <Link
+            <FilterPill
               key={t.value}
+              active={active}
               href={buildPageUrl(sp, { status: t.value, page: 1 })}
-              className={`shrink-0 rounded-full px-4 h-9 inline-flex items-center text-sm font-semibold transition-colors ${
-                active
-                  ? "bg-jc-primary-dark text-white"
-                  : "bg-white border border-black/[0.06] text-jc-text-secondary"
-              }`}
             >
               {t.label}
-            </Link>
+            </FilterPill>
           );
         })}
       </div>
@@ -196,23 +192,17 @@ export default async function AdminPaymentsPage({
       {totalPages > 1 ? (
         <nav className="flex items-center justify-center gap-3 pt-2">
           {page > 1 ? (
-            <Link
-              href={buildPageUrl(sp, { page: page - 1 })}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={buildPageUrl(sp, { page: page - 1 })}>
               Précédent
-            </Link>
+            </PagerLink>
           ) : null}
           <span className="text-xs text-jc-text-secondary">
             Page {page} / {totalPages}
           </span>
           {page < totalPages ? (
-            <Link
-              href={buildPageUrl(sp, { page: page + 1 })}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={buildPageUrl(sp, { page: page + 1 })}>
               Suivant
-            </Link>
+            </PagerLink>
           ) : null}
         </nav>
       ) : null}

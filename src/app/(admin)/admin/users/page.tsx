@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Search, Users } from "lucide-react";
 import { listAdminUsers } from "@/features/admin/queries";
 import { UserActions } from "./user-actions";
+import { FilterPill, PagerLink } from "../filter-link";
 
 const ROLE_LABEL = {
   candidate: "Candidat",
@@ -94,20 +94,16 @@ export default async function AdminUsersPage({
         {ROLE_TABS.map((t) => {
           const active = (validRole ?? "all") === t.value;
           return (
-            <Link
+            <FilterPill
               key={t.value}
+              active={active}
               href={buildPageUrl("/admin/users", sp, {
                 role: t.value,
                 page: 1,
               })}
-              className={`shrink-0 rounded-full px-4 h-9 inline-flex items-center text-sm font-semibold transition-colors ${
-                active
-                  ? "bg-jc-primary-dark text-white"
-                  : "bg-white border border-black/[0.06] text-jc-text-secondary"
-              }`}
             >
               {t.label}
-            </Link>
+            </FilterPill>
           );
         })}
       </div>
@@ -205,23 +201,17 @@ export default async function AdminUsersPage({
       {totalPages > 1 ? (
         <nav className="flex items-center justify-center gap-3 pt-2">
           {page > 1 ? (
-            <Link
-              href={buildPageUrl("/admin/users", sp, { page: page - 1 })}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={buildPageUrl("/admin/users", sp, { page: page - 1 })}>
               Précédent
-            </Link>
+            </PagerLink>
           ) : null}
           <span className="text-xs text-jc-text-secondary">
             Page {page} / {totalPages}
           </span>
           {page < totalPages ? (
-            <Link
-              href={buildPageUrl("/admin/users", sp, { page: page + 1 })}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={buildPageUrl("/admin/users", sp, { page: page + 1 })}>
               Suivant
-            </Link>
+            </PagerLink>
           ) : null}
         </nav>
       ) : null}

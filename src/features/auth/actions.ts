@@ -10,9 +10,11 @@ import { db } from "@/lib/db";
 import { candidateProfiles, employerProfiles, users } from "@/lib/db/schema";
 import type { ActionResult, Role } from "@/types";
 import {
+  changePasswordSchema,
   loginSchema,
   registerCandidateSchema,
   registerEmployerSchema,
+  type ChangePasswordInput,
   type LoginInput,
   type RegisterCandidateInput,
   type RegisterEmployerInput,
@@ -236,6 +238,56 @@ export async function login(
       : null;
 
   redirect(safeRedirect ?? homeForRole(row.role));
+}
+
+/**
+ * Changement de mot de passe de l'utilisateur connecté.
+ *
+ * 1. Vérifie le mot de passe actuel via `signInWithPassword` (Supabase ne
+ *    propose pas de check direct) — protège contre un changement par une
+ *    session laissée ouverte.
+ * 2. Met à jour le mot de passe via `auth.updateUser`.
+ *
+ * Réutilisable par n'importe quel rôle (admin, candidat, employeur) : l'id et
+ * l'email viennent toujours de la session courante, jamais du client.
+ */
+export async function changePassword(
+  input: ChangePasswordInput,
+): Promise<ActionResult<{ ok: true }>> {
+  const user = await requireAuth();
+
+  const parsed = changePasswordSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, error: formatZodError(parsed.error) };
+  }
+  const { currentPassword, newPassword } = parsed.data;
+
+  const supabase = await createClient();
+
+  // Re-vérifie le mot de passe actuel (réinitialise la session du même user).
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+  });
+  if (signInError) {
+    return {
+      success: false,
+      error: "Mot de passe actuel incorrect",
+      code: "invalid_current_password",
+    };
+  }
+
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+  if (updateError) {
+    return {
+      success: false,
+      error: updateError.message ?? "Impossible de modifier le mot de passe",
+    };
+  }
+
+  return { success: true, data: { ok: true } };
 }
 
 export async function logout(): Promise<void> {

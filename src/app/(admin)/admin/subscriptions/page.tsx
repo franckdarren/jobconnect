@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { CreditCard } from "lucide-react";
 import { listAdminSubscriptions } from "@/features/admin/queries";
+import { PagerLink } from "../filter-link";
 
 const PLAN_LABEL = {
   candidate_free: "Candidat Gratuit",
@@ -108,23 +108,17 @@ export default async function AdminSubscriptionsPage({
       {totalPages > 1 ? (
         <nav className="flex items-center justify-center gap-3 pt-2">
           {page > 1 ? (
-            <Link
-              href={`/admin/subscriptions?page=${page - 1}`}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={`/admin/subscriptions?page=${page - 1}`}>
               Précédent
-            </Link>
+            </PagerLink>
           ) : null}
           <span className="text-xs text-jc-text-secondary">
             Page {page} / {totalPages}
           </span>
           {page < totalPages ? (
-            <Link
-              href={`/admin/subscriptions?page=${page + 1}`}
-              className="rounded-full bg-jc-primary-dark text-white text-xs font-semibold px-4 py-1.5"
-            >
+            <PagerLink href={`/admin/subscriptions?page=${page + 1}`}>
               Suivant
-            </Link>
+            </PagerLink>
           ) : null}
         </nav>
       ) : null}
