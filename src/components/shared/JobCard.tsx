@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Briefcase, MapPin, Banknote, Clock, Hammer, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -43,10 +44,11 @@ export function JobCard({
       <div className="p-4 flex gap-3">
         <div className="shrink-0 w-12 h-12 rounded-xl bg-jc-background flex items-center justify-center overflow-hidden">
           {job.logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={job.logoUrl}
               alt={job.company}
+              width={48}
+              height={48}
               className="w-full h-full object-cover"
             />
           ) : (

@@ -206,6 +206,8 @@ export const candidateSkills = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.candidateId, t.skillId] }),
+    // skill_id seul pour les filtrages inArray(skillId, …) dans searchCandidates.
+    skillIdx: index("candidate_skills_skill_idx").on(t.skillId),
   }),
 );
 
@@ -263,7 +265,9 @@ export const jobOffers = pgTable(
       .defaultNow(),
   },
   (t) => ({
-    statusIdx: index("job_offers_status_idx").on(t.status),
+    // Composite status + publishedAt couvre WHERE status='active' ORDER BY published_at DESC
+    // utilisé dans listActiveJobOffers et recommendJobOffers.
+    statusPublishedIdx: index("job_offers_status_published_idx").on(t.status, t.publishedAt),
     cityIdx: index("job_offers_city_idx").on(t.city),
     employerIdx: index("job_offers_employer_idx").on(t.employerId),
   }),
@@ -281,6 +285,8 @@ export const jobOfferSkills = pgTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.jobOfferId, t.skillId] }),
+    // skill_id seul pour les jointures dans recommendJobOffers (sous-requête corrélée).
+    skillIdx: index("job_offer_skills_skill_idx").on(t.skillId),
   }),
 );
 

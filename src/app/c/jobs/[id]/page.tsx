@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Briefcase,
@@ -82,12 +83,16 @@ export default async function JobDetailPage({
         <div className="md:col-span-2 space-y-4">
           <article className="jc-card overflow-hidden">
             {job.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={job.imageUrl}
-                alt={job.title}
-                className="w-full h-40 md:h-56 object-cover"
-              />
+              <div className="relative w-full h-40 md:h-56">
+                <Image
+                  src={job.imageUrl}
+                  alt={job.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                  priority
+                />
+              </div>
             ) : (
               <div className="w-full h-40 md:h-56 bg-jc-primary-dark/95 flex items-center justify-center">
                 <Briefcase className="w-10 h-10 text-white/30" />
@@ -98,10 +103,11 @@ export default async function JobDetailPage({
               <div className="flex items-start gap-3">
                 <div className="w-12 h-12 rounded-xl bg-jc-background overflow-hidden flex items-center justify-center shrink-0">
                   {data.employerLogo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={data.employerLogo}
                       alt={data.employerName ?? ""}
+                      width={48}
+                      height={48}
                       className="w-full h-full object-cover"
                     />
                   ) : (

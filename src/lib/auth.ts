@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { createClient } from "@/lib/supabase/server";
@@ -7,7 +8,10 @@ import { users } from "@/lib/db/schema";
 import type { Role } from "@/types";
 import type { User } from "@/types/database";
 
-export async function getCurrentUser(): Promise<User | null> {
+// cache() déduplique les appels dans le même arbre de rendu (layout + page).
+// Sans ça, middleware + layout + page appellent chacun getUser() = 3 allers-
+// retours réseau vers Supabase Auth par navigation.
+export const getCurrentUser = cache(async (): Promise<User | null> => {
   const supabase = await createClient();
   const {
     data: { user: authUser },
@@ -17,7 +21,7 @@ export async function getCurrentUser(): Promise<User | null> {
 
   const [row] = await db.select().from(users).where(eq(users.id, authUser.id));
   return row ?? null;
-}
+});
 
 export async function requireAuth(): Promise<User> {
   const user = await getCurrentUser();

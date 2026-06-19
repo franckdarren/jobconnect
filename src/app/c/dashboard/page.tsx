@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Briefcase, Send, Clock, Eye, Check, X, Lock } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import {
@@ -167,10 +168,11 @@ export default async function CandidateDashboardPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-jc-background overflow-hidden flex items-center justify-center shrink-0">
                         {a.companyLogo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          <Image
                             src={a.companyLogo}
                             alt={a.companyName ?? ""}
+                            width={40}
+                            height={40}
                             className="w-full h-full object-cover"
                           />
                         ) : (

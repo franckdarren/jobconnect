@@ -1,7 +1,7 @@
 "use client";
 
-import { useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Phone, Lock, ArrowRight, Loader2 } from "lucide-react";
@@ -12,9 +12,20 @@ import { loginSchema, type LoginInput } from "@/features/auth/schemas";
 import { login } from "@/features/auth/actions";
 
 export function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const noticeShown = useRef(false);
+
+  useEffect(() => {
+    if (noticeShown.current) return;
+    if (params.get("deleted") === "1") {
+      noticeShown.current = true;
+      toast.success("Votre compte a bien été supprimé.");
+    } else if (params.get("suspended") === "1") {
+      noticeShown.current = true;
+      toast.error("Compte suspendu, contactez le support.");
+    }
+  }, [params]);
 
   const {
     register,
@@ -27,20 +38,12 @@ export function LoginForm() {
 
   const onSubmit = (values: LoginInput) => {
     startTransition(async () => {
-      const result = await login(values);
-      if (!result.success) {
+      // On success the action redirects server-side (cookies + navigation in
+      // one response), so it only ever returns when there is an error.
+      const result = await login(values, params.get("redirect") ?? undefined);
+      if (result && !result.success) {
         toast.error(result.error);
-        return;
       }
-      const explicitRedirect = params.get("redirect");
-      const fallback =
-        result.data.role === "admin"
-          ? "/admin/dashboard"
-          : result.data.role === "employer"
-            ? "/e/home"
-            : "/c/home";
-      router.push(explicitRedirect ?? fallback);
-      router.refresh();
     });
   };
 

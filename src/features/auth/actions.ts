@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { candidateProfiles, employerProfiles, users } from "@/lib/db/schema";
 import type { ActionResult, Role } from "@/types";
@@ -164,9 +165,30 @@ export async function registerEmployer(
   return { success: true, data: { userId: signUp.user.id } };
 }
 
+function homeForRole(role: Role): string {
+  switch (role) {
+    case "admin":
+      return "/admin/dashboard";
+    case "employer":
+      return "/e/home";
+    default:
+      return "/c/home";
+  }
+}
+
+/**
+ * Connexion. En cas de succès, redirige **côté serveur** : la réponse de
+ * redirection embarque les cookies de session fraîchement posés, donc la
+ * requête de navigation suivante porte déjà la session (pas de course
+ * client/serveur, pas besoin de recharger la page).
+ *
+ * `redirectTo` : destination explicite (param `?redirect=`), validée pour
+ * n'accepter qu'un chemin interne.
+ */
 export async function login(
   input: LoginInput,
-): Promise<ActionResult<{ role: Role }>> {
+  redirectTo?: string,
+): Promise<ActionResult<never>> {
   const parsed = loginSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: formatZodError(parsed.error) };
@@ -207,11 +229,86 @@ export async function login(
     };
   }
 
-  return { success: true, data: { role: row.role } };
+  // Only honour internal paths to avoid open-redirect.
+  const safeRedirect =
+    redirectTo && redirectTo.startsWith("/") && !redirectTo.startsWith("//")
+      ? redirectTo
+      : null;
+
+  redirect(safeRedirect ?? homeForRole(row.role));
 }
 
 export async function logout(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/login");
+}
+
+// Buckets where uploaded files are keyed by `${userId}/...`. Cleaned up
+// best-effort when an account is deleted so no orphaned files remain.
+const USER_STORAGE_BUCKETS = [
+  "avatars",
+  "cvs",
+  "company-logos",
+  "job-images",
+] as const;
+
+async function removeUserStorage(
+  admin: ReturnType<typeof createAdminClient>,
+  userId: string,
+): Promise<void> {
+  for (const bucket of USER_STORAGE_BUCKETS) {
+    try {
+      const { data: files } = await admin.storage.from(bucket).list(userId);
+      if (files && files.length > 0) {
+        await admin.storage
+          .from(bucket)
+          .remove(files.map((f) => `${userId}/${f.name}`));
+      }
+    } catch {
+      // best-effort cleanup — never block account deletion on storage
+    }
+  }
+}
+
+/**
+ * Suppression définitive du compte de l'utilisateur connecté.
+ *
+ * Ordre des opérations :
+ * 1. Nettoyage best-effort des fichiers Storage (avatars, CV, logos, images).
+ * 2. Suppression de la ligne `users` → cascade sur tous les profils, offres,
+ *    candidatures, abonnements, paiements, notifications (FK onDelete cascade).
+ * 3. Suppression de l'utilisateur Supabase Auth (service role).
+ * 4. Déconnexion de la session courante.
+ *
+ * L'utilisateur ne peut supprimer que SON propre compte (id pris de la session).
+ */
+export async function deleteAccount(): Promise<ActionResult<{ ok: true }>> {
+  const user = await requireAuth();
+
+  const admin = createAdminClient();
+
+  await removeUserStorage(admin, user.id);
+
+  try {
+    await db.delete(users).where(eq(users.id, user.id));
+  } catch (err) {
+    return {
+      success: false,
+      error:
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de la suppression des données",
+    };
+  }
+
+  const { error: authError } = await admin.auth.admin.deleteUser(user.id);
+  if (authError) {
+    return { success: false, error: authError.message };
+  }
+
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+
+  return { success: true, data: { ok: true } };
 }

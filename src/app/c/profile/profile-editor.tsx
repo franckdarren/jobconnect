@@ -26,6 +26,7 @@ import { IconInput } from "@/components/shared/IconInput";
 import { ExperienceModal } from "@/components/shared/ExperienceModal";
 import { EducationModal } from "@/components/shared/EducationModal";
 import { SkillsModal } from "@/components/shared/SkillsModal";
+import { DeleteAccountSection } from "@/components/shared/DeleteAccountSection";
 import {
   updateCandidateProfileSchema,
   type UpdateCandidateProfileInput,
@@ -512,6 +513,9 @@ export function ProfileEditor({
       </section>
 
       </div>
+
+      {/* ===== Zone danger : suppression du compte ===== */}
+      <DeleteAccountSection />
 
       {/* ===== Modals ===== */}
       <ExperienceModal

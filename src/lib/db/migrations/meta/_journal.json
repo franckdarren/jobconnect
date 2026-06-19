@@ -8,6 +8,13 @@
       "when": 1780504502349,
       "tag": "0000_charming_fallen_one",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781864468528,
+      "tag": "0001_glorious_wong",
+      "breakpoints": true
     }
   ]
 }

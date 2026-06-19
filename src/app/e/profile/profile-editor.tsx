@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { IconInput } from "@/components/shared/IconInput";
+import { DeleteAccountSection } from "@/components/shared/DeleteAccountSection";
 import {
   updateEmployerProfileSchema,
   type UpdateEmployerProfileInput,
@@ -182,6 +183,9 @@ export function EmployerProfileEditor({ profile, phone }: Props) {
           {isSaving ? "Enregistrement..." : "Enregistrer les modifications"}
         </Button>
       </form>
+
+      {/* ===== Zone danger : suppression du compte ===== */}
+      <DeleteAccountSection />
     </div>
   );
 }

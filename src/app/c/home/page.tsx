@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Eye, Send, Sparkles, Briefcase, Banknote, GraduationCap, Hammer, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
@@ -125,10 +126,11 @@ export default async function CandidateHomePage() {
                     <div className="flex gap-3">
                       <div className="shrink-0 w-12 h-12 rounded-xl bg-jc-background flex items-center justify-center overflow-hidden">
                         {job.companyLogoUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          <Image
                             src={job.companyLogoUrl}
                             alt={job.companyName ?? "Entreprise"}
+                            width={48}
+                            height={48}
                             className="w-full h-full object-cover"
                           />
                         ) : (
