@@ -9,6 +9,15 @@ const PLAN_LABEL = {
   employer_pro: "Employeur Pro",
 } as const;
 
+const PLAN_STYLE = {
+  candidate_premium: "bg-jc-light-green text-jc-primary-green",
+  employer_pro: "bg-jc-light-green text-jc-primary-green",
+  candidate_free:
+    "bg-jc-card text-jc-text-secondary border border-jc-text-muted/30",
+  employer_free:
+    "bg-jc-card text-jc-text-secondary border border-jc-text-muted/30",
+} as const;
+
 const STATUS_STYLE = {
   pending: "bg-jc-orange/10 text-jc-orange",
   success: "bg-jc-light-green text-jc-primary-green",
@@ -130,8 +139,13 @@ export default async function AdminPaymentsPage({
             <tbody>
               {rows.map((p) => (
                 <tr key={p.id} className="border-b border-black/5 last:border-0">
-                  <td className="px-4 py-3 font-mono text-[11px] text-jc-text-secondary break-all">
-                    {p.merchantRef}
+                  <td className="px-4 py-3">
+                    <span
+                      className="block max-w-[160px] truncate font-mono text-[11px] text-jc-text-secondary"
+                      title={p.merchantRef ?? undefined}
+                    >
+                      {p.merchantRef ?? "—"}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-col">
@@ -144,7 +158,9 @@ export default async function AdminPaymentsPage({
                     </div>
                   </td>
                   <td className="px-4 py-3 text-xs">
-                    <span className="rounded-full bg-jc-background px-2 py-0.5 font-semibold">
+                    <span
+                      className={`inline-block whitespace-nowrap rounded-full px-2 py-0.5 font-semibold ${PLAN_STYLE[p.plan]}`}
+                    >
                       {PLAN_LABEL[p.plan]}
                     </span>
                   </td>
