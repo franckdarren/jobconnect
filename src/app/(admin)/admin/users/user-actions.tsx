@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Ban,
@@ -10,9 +10,16 @@ import {
   Star,
   StarOff,
   Loader2,
+  MoreHorizontal,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import {
   activateUser,
   boostCandidate,
@@ -38,14 +45,11 @@ export function UserActions({
   isBoosted,
 }: Props) {
   const router = useRouter();
-  const [, startTransition] = useTransition();
-  const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const run = (action: string, fn: () => Promise<{ success: boolean; error?: string }>) => {
-    setPendingAction(action);
+  const run = (fn: () => Promise<{ success: boolean; error?: string }>) => {
     startTransition(async () => {
       const res = await fn();
-      setPendingAction(null);
       if (!res.success) {
         toast.error(res.error ?? "Erreur");
         return;
@@ -55,117 +59,81 @@ export function UserActions({
     });
   };
 
+  const hasActions = role !== "admin";
+  if (!hasActions) {
+    return <span className="text-jc-text-muted">—</span>;
+  }
+
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {role !== "admin" ? (
-        isActive ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() => run("suspend", () => suspendUser(userId))}
-            className="h-8 text-xs text-jc-warning border-jc-warning/30"
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          disabled={isPending}
+          className="h-8 w-8 p-0"
+        >
+          {isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <MoreHorizontal className="w-4 h-4" />
+          )}
+          <span className="sr-only">Actions</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="admin-shell w-44">
+        {isActive ? (
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={() => run(() => suspendUser(userId))}
           >
-            {pendingAction === "suspend" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <Ban className="w-3 h-3 mr-1" />
-            )}
+            <Ban className="w-4 h-4" />
             Suspendre
-          </Button>
+          </DropdownMenuItem>
         ) : (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() => run("activate", () => activateUser(userId))}
-            className="h-8 text-xs text-jc-primary-green border-jc-primary-green/30"
-          >
-            {pendingAction === "activate" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <CheckCircle2 className="w-3 h-3 mr-1" />
-            )}
+          <DropdownMenuItem onSelect={() => run(() => activateUser(userId))}>
+            <CheckCircle2 className="w-4 h-4 text-jc-primary-green" />
             Réactiver
-          </Button>
-        )
-      ) : null}
+          </DropdownMenuItem>
+        )}
 
-      {role === "employer" ? (
-        isVerified ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() => run("unverify", () => unverifyEmployer(userId))}
-            className="h-8 text-xs"
-          >
-            {pendingAction === "unverify" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <ShieldOff className="w-3 h-3 mr-1" />
-            )}
-            Retirer vérif.
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() => run("verify", () => verifyEmployer(userId))}
-            className="h-8 text-xs text-jc-primary-green border-jc-primary-green/30"
-          >
-            {pendingAction === "verify" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <BadgeCheck className="w-3 h-3 mr-1" />
-            )}
-            Vérifier
-          </Button>
-        )
-      ) : null}
+        {role === "employer" ? (
+          isVerified ? (
+            <DropdownMenuItem
+              onSelect={() => run(() => unverifyEmployer(userId))}
+            >
+              <ShieldOff className="w-4 h-4" />
+              Retirer vérif.
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onSelect={() => run(() => verifyEmployer(userId))}>
+              <BadgeCheck className="w-4 h-4 text-jc-primary-green" />
+              Vérifier
+            </DropdownMenuItem>
+          )
+        ) : null}
 
-      {role === "candidate" ? (
-        isBoosted ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() => run("unboost", () => unboostCandidate(userId))}
-            className="h-8 text-xs"
-          >
-            {pendingAction === "unboost" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <StarOff className="w-3 h-3 mr-1" />
-            )}
-            Retirer boost
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pendingAction !== null}
-            onClick={() =>
-              run("boost", () => boostCandidate({ candidateId: userId, days: 30 }))
-            }
-            className="h-8 text-xs text-jc-orange border-jc-orange/30"
-          >
-            {pendingAction === "boost" ? (
-              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-            ) : (
-              <Star className="w-3 h-3 mr-1" />
-            )}
-            Booster 30j
-          </Button>
-        )
-      ) : null}
-    </div>
+        {role === "candidate" ? (
+          isBoosted ? (
+            <DropdownMenuItem
+              onSelect={() => run(() => unboostCandidate(userId))}
+            >
+              <StarOff className="w-4 h-4" />
+              Retirer boost
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              onSelect={() =>
+                run(() => boostCandidate({ candidateId: userId, days: 30 }))
+              }
+            >
+              <Star className="w-4 h-4 text-jc-orange" />
+              Booster 30j
+            </DropdownMenuItem>
+          )
+        ) : null}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2, Loader2, MoreHorizontal } from "lucide-react";
+import { CalendarPlus, Loader2, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,21 +11,24 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { deleteJobOffer } from "@/features/admin/actions";
+import { extendSubscription } from "@/features/admin/actions";
 
-export function DeleteJobButton({ jobId }: { jobId: string }) {
+export function SubscriptionActions({
+  subscriptionId,
+}: {
+  subscriptionId: string;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const onDelete = () => {
-    if (!confirm("Supprimer définitivement cette offre ?")) return;
+  const onExtend = () => {
     startTransition(async () => {
-      const res = await deleteJobOffer(jobId);
+      const res = await extendSubscription({ subscriptionId, days: 30 });
       if (!res.success) {
         toast.error(res.error);
         return;
       }
-      toast.success("Offre supprimée");
+      toast.success("Abonnement prolongé de 30 jours");
       router.refresh();
     });
   };
@@ -49,9 +52,9 @@ export function DeleteJobButton({ jobId }: { jobId: string }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="admin-shell w-44">
-        <DropdownMenuItem variant="destructive" onSelect={onDelete}>
-          <Trash2 className="w-4 h-4" />
-          Supprimer
+        <DropdownMenuItem onSelect={onExtend}>
+          <CalendarPlus className="w-4 h-4 text-jc-primary-green" />
+          Prolonger (+30j)
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

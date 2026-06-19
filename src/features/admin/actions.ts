@@ -9,6 +9,7 @@ import {
   candidateProfiles,
   employerProfiles,
   jobOffers,
+  subscriptions,
   users,
 } from "@/lib/db/schema";
 import type { ActionResult } from "@/types";
@@ -16,6 +17,10 @@ import type { ActionResult } from "@/types";
 const idSchema = z.string().uuid("Identifiant invalide");
 const boostSchema = z.object({
   candidateId: z.string().uuid(),
+  days: z.number().int().min(1).max(365),
+});
+const extendSubscriptionSchema = z.object({
+  subscriptionId: z.string().uuid(),
   days: z.number().int().min(1).max(365),
 });
 
@@ -135,4 +140,41 @@ export async function unboostCandidate(
     .where(eq(candidateProfiles.userId, parsed.data));
   revalidatePath("/admin/users");
   return { success: true, data: { ok: true } };
+}
+
+export async function extendSubscription(input: {
+  subscriptionId: string;
+  days: number;
+}): Promise<ActionResult<{ ok: true; expiresAt: Date }>> {
+  await requireRole("admin");
+  const parsed = extendSubscriptionSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message ?? "Entrée invalide",
+    };
+  }
+
+  const [current] = await db
+    .select({ expiresAt: subscriptions.expiresAt })
+    .from(subscriptions)
+    .where(eq(subscriptions.id, parsed.data.subscriptionId))
+    .limit(1);
+  if (!current) {
+    return { success: false, error: "Abonnement introuvable" };
+  }
+
+  // Repart de la date d'expiration si encore valide, sinon de maintenant.
+  const now = new Date();
+  const base = current.expiresAt > now ? current.expiresAt : now;
+  const expiresAt = new Date(
+    base.getTime() + parsed.data.days * 24 * 60 * 60 * 1000,
+  );
+
+  await db
+    .update(subscriptions)
+    .set({ expiresAt, status: "active", cancelledAt: null })
+    .where(eq(subscriptions.id, parsed.data.subscriptionId));
+  revalidatePath("/admin/subscriptions");
+  return { success: true, data: { ok: true, expiresAt } };
 }

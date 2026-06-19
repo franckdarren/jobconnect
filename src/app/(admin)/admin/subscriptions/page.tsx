@@ -1,6 +1,7 @@
 import { CreditCard } from "lucide-react";
 import { listAdminSubscriptions } from "@/features/admin/queries";
 import { PagerLink } from "../filter-link";
+import { SubscriptionActions } from "./subscription-actions";
 
 const PLAN_LABEL = {
   candidate_free: "Candidat Gratuit",
@@ -65,6 +66,7 @@ export default async function AdminSubscriptionsPage({
                 <th className="px-4 py-3">Statut</th>
                 <th className="px-4 py-3">Début</th>
                 <th className="px-4 py-3">Expire</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -97,6 +99,9 @@ export default async function AdminSubscriptionsPage({
                   </td>
                   <td className="px-4 py-3 text-xs text-jc-text-muted">
                     {formatDate(s.expiresAt)}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <SubscriptionActions subscriptionId={s.id} />
                   </td>
                 </tr>
               ))}
