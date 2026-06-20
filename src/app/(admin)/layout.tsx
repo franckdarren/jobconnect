@@ -21,7 +21,7 @@ export default async function AdminLayout({
     <AdminThemeProvider>
       <div className="admin-shell min-h-dvh bg-jc-background md:flex">
         {/* Desktop sidebar */}
-        <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-black/4 p-4">
+        <aside className="hidden md:flex sticky top-0 h-dvh w-60 shrink-0 flex-col bg-white border-r border-black/4 p-4">
           <Link href="/admin/dashboard" className="font-bold text-lg mb-6">
             241Job <span className="text-jc-text-muted">/ admin</span>
           </Link>
