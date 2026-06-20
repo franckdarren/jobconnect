@@ -35,7 +35,6 @@ function LinkSpinner() {
 
 export function NavLinks() {
   const pathname = usePathname();
-  const [isLoggingOut, startLogout] = useTransition();
 
   return (
     <nav className="flex flex-col gap-1">
@@ -58,20 +57,26 @@ export function NavLinks() {
           </Link>
         );
       })}
-
-      <button
-        type="button"
-        onClick={() => startLogout(() => logout())}
-        disabled={isLoggingOut}
-        className="mt-2 flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-jc-warning hover:bg-jc-warning/5 transition-colors disabled:opacity-50"
-      >
-        {isLoggingOut ? (
-          <Loader2 className="w-4 h-4 shrink-0 animate-spin" aria-hidden />
-        ) : (
-          <LogOut className="w-4 h-4 shrink-0" aria-hidden />
-        )}
-        {isLoggingOut ? "Déconnexion..." : "Se déconnecter"}
-      </button>
     </nav>
+  );
+}
+
+export function LogoutButton() {
+  const [isLoggingOut, startLogout] = useTransition();
+
+  return (
+    <button
+      type="button"
+      onClick={() => startLogout(() => logout())}
+      disabled={isLoggingOut}
+      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-jc-warning hover:bg-jc-warning/5 transition-colors disabled:opacity-50"
+    >
+      {isLoggingOut ? (
+        <Loader2 className="w-4 h-4 shrink-0 animate-spin" aria-hidden />
+      ) : (
+        <LogOut className="w-4 h-4 shrink-0" aria-hidden />
+      )}
+      {isLoggingOut ? "Déconnexion..." : "Se déconnecter"}
+    </button>
   );
 }

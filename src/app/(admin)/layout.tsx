@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { requireRole } from "@/lib/auth";
-import { NavLinks } from "./nav-links";
+import { NavLinks, LogoutButton } from "./nav-links";
 import { AdminThemeProvider, ThemeToggle } from "./theme";
 
 export default async function AdminLayout({
@@ -22,13 +22,15 @@ export default async function AdminLayout({
       <div className="admin-shell min-h-dvh bg-jc-background md:flex">
         {/* Desktop sidebar */}
         <aside className="hidden md:flex sticky top-0 h-dvh w-60 shrink-0 flex-col bg-white border-r border-black/4 p-4">
-          <Link href="/admin/dashboard" className="font-bold text-lg mb-6">
-            241Job <span className="text-jc-text-muted">/ admin</span>
-          </Link>
-          <NavLinks />
-          <div className="mt-auto pt-4 flex items-center justify-between border-t border-black/4">
-            <span className="text-xs text-jc-text-muted">Thème</span>
+          <div className="flex items-start justify-between mb-6">
+            <Link href="/admin/dashboard" className="font-bold text-lg">
+              241Job <span className="text-jc-text-muted">/ admin</span>
+            </Link>
             <ThemeToggle />
+          </div>
+          <NavLinks />
+          <div className="mt-auto pt-4 border-t border-black/4">
+            <LogoutButton />
           </div>
         </aside>
 
@@ -42,7 +44,10 @@ export default async function AdminLayout({
               >
                 <Menu className="w-5 h-5" />
               </SheetTrigger>
-              <SheetContent side="left" className="admin-shell w-64 p-4">
+              <SheetContent
+                side="left"
+                className="admin-shell w-64 p-4 flex flex-col"
+              >
                 <SheetHeader className="px-0 pt-0">
                   <SheetTitle className="text-left text-lg font-bold">
                     241Job{" "}
@@ -53,6 +58,9 @@ export default async function AdminLayout({
                 </SheetHeader>
                 <div className="mt-4">
                   <NavLinks />
+                </div>
+                <div className="mt-auto pt-4 border-t border-black/4">
+                  <LogoutButton />
                 </div>
               </SheetContent>
             </Sheet>
