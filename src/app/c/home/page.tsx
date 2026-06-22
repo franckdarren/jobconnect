@@ -4,11 +4,13 @@ import { Eye, Send, Sparkles, Briefcase, Banknote, GraduationCap, Hammer, Target
 import { Button } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth";
 import { getCandidateProfile, getCandidateProfileViewStats } from "@/features/candidates/queries";
+import { computeProfileCompleteness } from "@/features/candidates/completeness";
 import { getCandidateApplicationStats } from "@/features/applications/queries";
 import { recommendJobOffers } from "@/features/jobs/recommendations";
 import { getActiveSubscription } from "@/features/payments/queries";
 import { HeroCard } from "@/components/shared/HeroCard";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
+import { ProfileCompletenessCard } from "@/components/shared/ProfileCompletenessCard";
 
 export default async function CandidateHomePage() {
   const user = await requireRole("candidate");
@@ -21,6 +23,20 @@ export default async function CandidateHomePage() {
   ]);
   const firstName = data?.profile.firstName ?? "";
   const isPremium = subscription?.plan === "candidate_premium";
+  const completeness = data
+    ? computeProfileCompleteness({
+        photoUrl: data.profile.photoUrl,
+        profession: data.profile.profession,
+        summary: data.profile.summary,
+        city: data.profile.city,
+        experienceLevel: data.profile.experienceLevel,
+        availability: data.profile.availability,
+        cvUrl: data.profile.cvUrl,
+        skillsCount: data.skills.length,
+        experiencesCount: data.experiences.length,
+        educationsCount: data.educations.length,
+      })
+    : null;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -70,6 +86,10 @@ export default async function CandidateHomePage() {
           </Button>
         </HeroCard>
       )}
+
+      {completeness ? (
+        <ProfileCompletenessCard completeness={completeness} variant="compact" />
+      ) : null}
 
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         <article className="jc-card p-4">

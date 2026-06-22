@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { requireRole } from "@/lib/auth";
 import { getJobOfferById } from "@/features/jobs/queries";
+import { getCandidateCompleteness } from "@/features/candidates/queries";
 import { hasAppliedToJob } from "@/features/applications/queries";
 import { ApplyButton } from "./apply-button";
 
@@ -32,7 +33,10 @@ export default async function JobDetailPage({
   if (!data || data.job.status !== "active") notFound();
 
   const { job, missions, skills } = data;
-  const alreadyApplied = await hasAppliedToJob(user.id, id);
+  const [alreadyApplied, completeness] = await Promise.all([
+    hasAppliedToJob(user.id, id),
+    getCandidateCompleteness(user.id),
+  ]);
 
   const applyAction = alreadyApplied ? (
     <button
@@ -47,6 +51,9 @@ export default async function JobDetailPage({
       jobId={job.id}
       jobTitle={job.title}
       employerWhatsapp={data.employerWhatsapp}
+      profilePercent={completeness?.percent ?? 100}
+      profileMeetsThreshold={completeness?.meetsApplyThreshold ?? true}
+      profileMissing={completeness?.missing.map((m) => m.label) ?? []}
     />
   ) : (
     <button

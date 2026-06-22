@@ -21,6 +21,10 @@ import {
   subscriptions,
   users,
 } from "@/lib/db/schema";
+import {
+  computeProfileCompleteness,
+  type ProfileCompleteness,
+} from "./completeness";
 
 export type FullCandidateProfile = Awaited<
   ReturnType<typeof getCandidateProfile>
@@ -108,6 +112,35 @@ export async function getCandidateProfile(userId: string) {
 
 export async function getCandidateById(candidateId: string) {
   return getCandidateProfile(candidateId);
+}
+
+/**
+ * Complétude du profil candidat, calculée en une seule requête (sous-requêtes
+ * corrélées de comptage). Retourne `null` si le profil n'existe pas encore.
+ *
+ * Le calcul lui-même vit dans `completeness.ts` (pur, partagé client/serveur) —
+ * cette fonction ne fait que rassembler les données.
+ */
+export async function getCandidateCompleteness(
+  userId: string,
+): Promise<ProfileCompleteness | null> {
+  const [row] = await db
+    .select({
+      photoUrl: candidateProfiles.photoUrl,
+      profession: candidateProfiles.profession,
+      summary: candidateProfiles.summary,
+      city: candidateProfiles.city,
+      experienceLevel: candidateProfiles.experienceLevel,
+      availability: candidateProfiles.availability,
+      cvUrl: candidateProfiles.cvUrl,
+      skillsCount: sql<number>`(select count(*) from ${candidateSkills} where ${candidateSkills.candidateId} = ${candidateProfiles.userId})::int`,
+      experiencesCount: sql<number>`(select count(*) from ${candidateExperiences} where ${candidateExperiences.candidateId} = ${candidateProfiles.userId})::int`,
+      educationsCount: sql<number>`(select count(*) from ${candidateEducations} where ${candidateEducations.candidateId} = ${candidateProfiles.userId})::int`,
+    })
+    .from(candidateProfiles)
+    .where(eq(candidateProfiles.userId, userId));
+  if (!row) return null;
+  return computeProfileCompleteness(row);
 }
 
 export async function searchSkills(query: string, limit = 8) {

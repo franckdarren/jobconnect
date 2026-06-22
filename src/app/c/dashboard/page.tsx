@@ -6,12 +6,16 @@ import {
   getCandidateApplicationStats,
   listOwnApplications,
 } from "@/features/applications/queries";
-import { getCandidateProfileViewStats } from "@/features/candidates/queries";
+import {
+  getCandidateProfileViewStats,
+  getCandidateCompleteness,
+} from "@/features/candidates/queries";
 import {
   checkCandidateApplicationQuota,
   getActivePlan,
 } from "@/lib/quotas";
 import { PremiumBadge } from "@/components/shared/PremiumBadge";
+import { ProfileCompletenessCard } from "@/components/shared/ProfileCompletenessCard";
 
 const STATUS_STYLE = {
   pending: "bg-jc-orange/10 text-jc-orange",
@@ -40,13 +44,15 @@ function formatDate(d: Date | string): string {
 
 export default async function CandidateDashboardPage() {
   const user = await requireRole("candidate");
-  const [stats, applications, quota, plan, viewStats] = await Promise.all([
-    getCandidateApplicationStats(user.id),
-    listOwnApplications(user.id),
-    checkCandidateApplicationQuota(user.id),
-    getActivePlan(user.id, "candidate_free"),
-    getCandidateProfileViewStats(user.id),
-  ]);
+  const [stats, applications, quota, plan, viewStats, completeness] =
+    await Promise.all([
+      getCandidateApplicationStats(user.id),
+      listOwnApplications(user.id),
+      checkCandidateApplicationQuota(user.id),
+      getActivePlan(user.id, "candidate_free"),
+      getCandidateProfileViewStats(user.id),
+      getCandidateCompleteness(user.id),
+    ]);
   const isPremium = plan === "candidate_premium";
 
   return (
@@ -55,6 +61,10 @@ export default async function CandidateDashboardPage() {
         <h1 className="text-2xl md:text-3xl font-bold">Mes candidatures</h1>
         {isPremium ? <PremiumBadge label="PREMIUM" variant="green" /> : null}
       </header>
+
+      {completeness && !completeness.isComplete ? (
+        <ProfileCompletenessCard completeness={completeness} />
+      ) : null}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         <article className="jc-card p-4">

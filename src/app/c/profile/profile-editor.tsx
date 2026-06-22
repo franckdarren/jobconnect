@@ -27,6 +27,8 @@ import { ExperienceModal } from "@/components/shared/ExperienceModal";
 import { EducationModal } from "@/components/shared/EducationModal";
 import { SkillsModal } from "@/components/shared/SkillsModal";
 import { DeleteAccountSection } from "@/components/shared/DeleteAccountSection";
+import { ProfileCompletenessCard } from "@/components/shared/ProfileCompletenessCard";
+import type { ProfileCompleteness } from "@/features/candidates/completeness";
 import {
   updateCandidateProfileSchema,
   type UpdateCandidateProfileInput,
@@ -52,6 +54,7 @@ type ProfileEditorProps = {
   educations: CandidateEducation[];
   skills: Skill[];
   phone: string;
+  completeness: ProfileCompleteness;
 };
 
 function formatMonthYear(value: string | null | undefined): string {
@@ -66,6 +69,7 @@ export function ProfileEditor({
   educations,
   skills,
   phone,
+  completeness,
 }: ProfileEditorProps) {
   const router = useRouter();
   const [isSaving, startSaving] = useTransition();
@@ -195,6 +199,11 @@ export function ProfileEditor({
         <h1 className="text-2xl md:text-3xl font-bold">Mon Profil</h1>
         <span className="w-7 md:hidden" />
       </header>
+
+      <ProfileCompletenessCard
+        completeness={completeness}
+        className="md:max-w-3xl"
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:max-w-3xl">
         {/* ===== Section : Photo + Infos perso ===== */}
