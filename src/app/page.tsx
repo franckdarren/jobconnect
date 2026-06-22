@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Briefcase } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
@@ -33,8 +33,15 @@ export default async function SplashPage() {
 
       <div className="flex flex-col items-center gap-6">
         <div className="relative">
-          <div className="w-24 h-24 rounded-3xl bg-white/10 flex items-center justify-center">
-            <Briefcase className="w-10 h-10 text-white/80" />
+          <div className="w-24 h-24 rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden">
+            <Image
+              src="/images/logo.jpg"
+              alt="241Job"
+              width={96}
+              height={96}
+              priority
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#2E8B57] flex items-center justify-center">
             <span className="text-white text-xs font-bold">J</span>

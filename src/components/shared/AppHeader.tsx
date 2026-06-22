@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { NotificationBell } from "./NotificationBell";
 import { NavMenu } from "./NavMenu";
 
@@ -23,8 +24,15 @@ export function AppHeader({
         <NavMenu role={role} isPremium={isPremium} />
         <Link
           href={`${prefix}/home`}
-          className="font-bold text-lg text-jc-text-primary tracking-tight"
+          className="flex items-center gap-1.5 font-bold text-lg text-jc-text-primary tracking-tight"
         >
+          <Image
+            src="/images/logo.jpg"
+            alt=""
+            width={28}
+            height={28}
+            className="w-7 h-7 rounded-md object-cover"
+          />
           241Job
         </Link>
         <div className="flex items-center gap-1 -mr-1">

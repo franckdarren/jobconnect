@@ -1,11 +1,19 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Briefcase, Building2, ArrowRight } from "lucide-react";
 
 export default function RegisterChoicePage() {
   return (
     <div className="w-full bg-white rounded-3xl shadow-sm p-6 sm:p-8">
       <div className="flex justify-center mb-4">
-        <Briefcase className="w-8 h-8 text-jc-primary-dark" />
+        <Image
+          src="/images/logo.jpg"
+          alt="241Job"
+          width={56}
+          height={56}
+          priority
+          className="w-14 h-14 rounded-xl object-cover"
+        />
       </div>
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold">241Job</h1>

@@ -1,4 +1,5 @@
-import { Briefcase, ShieldCheck, Zap } from "lucide-react";
+import Image from "next/image";
+import { ShieldCheck, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type AuthCardProps = {
@@ -20,7 +21,14 @@ export function AuthCard({
     <div className={cn("flex flex-col items-center w-full", className)}>
       <div className="w-full bg-white rounded-3xl shadow-sm p-6 sm:p-8">
         <div className="flex justify-center mb-4">
-          <Briefcase className="w-8 h-8 text-jc-primary-dark" />
+          <Image
+            src="/images/logo.jpg"
+            alt="241Job"
+            width={56}
+            height={56}
+            priority
+            className="w-14 h-14 rounded-xl object-cover"
+          />
         </div>
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-jc-text-primary">241Job</h1>

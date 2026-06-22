@@ -29,6 +29,13 @@ export const metadata: Metadata = {
   description:
     "Trouvez un job en 48h au Gabon. Plateforme de recrutement WhatsApp-first.",
   applicationName: "241Job",
+  icons: {
+    icon: [
+      { url: "/icons/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

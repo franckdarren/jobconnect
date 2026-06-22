@@ -1,6 +1,6 @@
 "use client";
 
-import { Briefcase } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function SplashLoading() {
@@ -19,8 +19,15 @@ export default function SplashLoading() {
 
       <div className="flex flex-col items-center gap-6">
         <div className="relative">
-          <div className="w-24 h-24 rounded-3xl bg-white/10 flex items-center justify-center animate-[pulse_2s_ease-in-out_infinite]">
-            <Briefcase className="w-10 h-10 text-white/80" />
+          <div className="w-24 h-24 rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden animate-[pulse_2s_ease-in-out_infinite]">
+            <Image
+              src="/images/logo.jpg"
+              alt="241Job"
+              width={96}
+              height={96}
+              priority
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#2E8B57] flex items-center justify-center">
             <span className="text-white text-xs font-bold">J</span>
